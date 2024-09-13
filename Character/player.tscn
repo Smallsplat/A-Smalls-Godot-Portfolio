@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cjorsjhnwhodd"]
+[gd_scene load_steps=29 format=3 uid="uid://cjorsjhnwhodd"]
 
 [ext_resource type="Texture2D" uid="uid://cl8elmofeblp8" path="res://Sprites/Temp/Jumping 8 Frame-Sheet.png" id="1_ap5kp"]
 [ext_resource type="Script" path="res://Character/CharacterStateMachine.gd" id="1_m8b41"]
@@ -186,14 +186,57 @@ tracks/2/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
+[sub_resource type="Animation" id="Animation_4qxmb"]
+resource_name = "Falling"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_ap5kp")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerSprite:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [5]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pteo8"]
 _data = {
+"Falling": SubResource("Animation_4qxmb"),
 "Idle": SubResource("Animation_82urs"),
 "Jump": SubResource("Animation_4cf5u"),
 "Landing": SubResource("Animation_m3enc"),
 "RESET": SubResource("Animation_vhfyc"),
 "Walking": SubResource("Animation_lm212")
 }
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c3wi3"]
+animation = &"Falling"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dust4"]
 animation = &"Jump"
@@ -224,22 +267,32 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6kxs8"]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7agpy"]
-
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b1ghk"]
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_le6t5"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yc1rk"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6ibom"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_um1qe"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_w2tn7"]
+states/Falling/node = SubResource("AnimationNodeAnimation_c3wi3")
+states/Falling/position = Vector2(614, -12)
 states/Jump/node = SubResource("AnimationNodeAnimation_dust4")
 states/Jump/position = Vector2(436, -12)
 states/Landing/node = SubResource("AnimationNodeAnimation_og736")
-states/Landing/position = Vector2(619, -12)
+states/Landing/position = Vector2(614, 100)
 states/Move/node = SubResource("AnimationNodeBlendSpace1D_kjv6v")
 states/Move/position = Vector2(436, 100)
 states/Start/position = Vector2(195, 100)
-transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_aqf70"), "Move", "Jump", SubResource("AnimationNodeStateMachineTransition_6kxs8"), "Jump", "Landing", SubResource("AnimationNodeStateMachineTransition_7agpy"), "Landing", "Move", SubResource("AnimationNodeStateMachineTransition_b1ghk")]
-graph_offset = Vector2(-33, -78)
+transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_aqf70"), "Move", "Jump", SubResource("AnimationNodeStateMachineTransition_6kxs8"), "Landing", "Move", SubResource("AnimationNodeStateMachineTransition_b1ghk"), "Jump", "Falling", SubResource("AnimationNodeStateMachineTransition_le6t5"), "Move", "Falling", SubResource("AnimationNodeStateMachineTransition_yc1rk"), "Falling", "Landing", SubResource("AnimationNodeStateMachineTransition_6ibom"), "Landing", "Jump", SubResource("AnimationNodeStateMachineTransition_um1qe")]
+graph_offset = Vector2(1, -65)
 
 [node name="Player" type="CharacterBody2D"]
 
@@ -269,6 +322,8 @@ character = NodePath("..")
 [node name="MovementController" type="Node" parent="." node_paths=PackedStringArray("character", "state_machine", "animation_controller")]
 script = ExtResource("7_p1det")
 character = NodePath("..")
+brake_force = 20.0
+coyote_frames = 10.0
 state_machine = NodePath("../CharacterStateMachine")
 animation_controller = NodePath("../AnimationController")
 

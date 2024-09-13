@@ -7,7 +7,7 @@ class_name AnimationController
 @export var animation_tree : AnimationTree
 @onready var playback = animation_tree["parameters/playback"]
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	DirectionSpriteFlip()
 
 func DirectionSpriteFlip():
@@ -19,12 +19,16 @@ func DirectionSpriteFlip():
 		player_sprite.flip_h = true
 		
 func Landed():
-	if (playback.get_current_node() == "Jump"):
+	if (playback.get_current_node() == "Falling"):
 		playback.travel("Landing")
 		
 func Jump():
-	if (playback.get_current_node() == "Move"):
+	if (playback.get_current_node() == "Move") or (playback.get_current_node() == "Landing"):
 		playback.travel("Jump")
+	
+func Fall():
+	if (playback.get_current_node() == "Move"):
+		playback.travel("Falling")
 
 func _on_animation_tree_animation_finished(anim_name):
 	if (anim_name == "Landing"):

@@ -16,17 +16,19 @@ tile_set = SubResource("TileSet_sickk")
 format = 2
 
 [node name="Player" parent="." instance=ExtResource("1_2ngr8")]
+position = Vector2(-117, 70)
 script = ExtResource("2_3eepc")
 
 [node name="RemoteCameraTransform2D" type="RemoteTransform2D" parent="Player"]
 remote_path = NodePath("../../Camera2D")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-117, 70)
 process_callback = 0
 position_smoothing_enabled = true
 
 [node name="GreyGridTexture" type="Sprite2D" parent="."]
-position = Vector2(0, 215)
+position = Vector2(-1, 234)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture"]
