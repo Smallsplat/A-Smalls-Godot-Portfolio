@@ -4,7 +4,7 @@ class_name CharacterStateMachine
 
 @export var character : CharacterBody2D
 
-enum states {grounded, airal, landing}
+enum states {grounded, airal, landing, wallrunning, walljumping}
 
 @onready var current_state = states.keys()[states.grounded]
 
@@ -28,9 +28,7 @@ func VerifyNewState(new_state : String):
 func StateOnEnter(state : String):
 	if state == "landing":
 		character.animation_controller.Landed()
-		#await get_tree().create_timer(0.2).timeout
-		if state == "landing":
-			SwitchStates("grounded")
+		SwitchStates("grounded")
 	if state == "airal":
 		if character.movement_controller.jumping == true:
 			character.animation_controller.Jump()

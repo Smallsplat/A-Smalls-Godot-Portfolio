@@ -11,17 +11,22 @@ extends CharacterBody2D
 @onready var playback = animation_tree["parameters/playback"]
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var direction : Vector2 = Vector2.ZERO
-
+	
 func _physics_process(delta):
-	# Add the gravity.
-	velocity.y += gravity * delta
-
+	animation_controller.AnimationPhysicsProcess()
+	movement_controller.MovementPhysicsProcess(delta)
+	
+	direction = Input.get_vector("left", "right", "up", "down") # Get the input direction
+	
 	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
-		movement_controller.jump()
+		movement_controller.jump(direction)
+	
+	if Input.is_action_pressed("crouch"):
+		movement_controller.is_crouching = true
+	else:
+		movement_controller.is_crouching = false
 
-	direction = Input.get_vector("left", "right", "up", "down") # Get the input direction
 	movement_controller.move(direction)
 	move_and_slide()
