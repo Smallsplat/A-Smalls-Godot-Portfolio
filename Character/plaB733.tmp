@@ -298,8 +298,6 @@ transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(1, -65)
 
 [node name="Player" type="CharacterBody2D"]
-floor_constant_speed = true
-floor_snap_length = 20.0
 script = ExtResource("1_ii5ia")
 
 [node name="PlayerSprite" type="Sprite2D" parent="."]
@@ -325,16 +323,14 @@ parameters/Move/blend_position = 0
 script = ExtResource("1_m8b41")
 character = NodePath("..")
 
-[node name="MovementController" type="Node" parent="." node_paths=PackedStringArray("character", "wall_run_raycast", "ground_raycast", "edge_detector", "debug_raycast", "state_machine", "animation_controller")]
+[node name="MovementController" type="Node" parent="." node_paths=PackedStringArray("character", "wall_run_raycast", "ground_raycast", "debug_raycast", "debug_raycast2", "state_machine", "animation_controller")]
 script = ExtResource("7_p1det")
 character = NodePath("..")
 wall_run_raycast = NodePath("../WallRunRayCast")
 ground_raycast = NodePath("../GroundRayCast")
-edge_detector = NodePath("../EdgeDetector")
 debug_raycast = NodePath("../Debug Raycast")
+debug_raycast2 = NodePath("../Debug Raycast2")
 brake_force = 20.0
-overspeed_multi = 2
-coyote_jump_edge_finder_bonus = 15.0
 state_machine = NodePath("../CharacterStateMachine")
 animation_controller = NodePath("../AnimationController")
 
@@ -352,13 +348,12 @@ target_position = Vector2(-10, 0)
 position = Vector2(-1, 17)
 target_position = Vector2(0, 20)
 
-[node name="EdgeDetector" type="RayCast2D" parent="."]
-position = Vector2(-1, 0)
-target_position = Vector2(0, 18)
-
 [node name="Debug Raycast" type="RayCast2D" parent="."]
-visible = false
 position = Vector2(-1, -15)
+target_position = Vector2(18, 0)
+
+[node name="Debug Raycast2" type="RayCast2D" parent="."]
+position = Vector2(-1, -18)
 target_position = Vector2(18, 0)
 
 [connection signal="animation_finished" from="AnimationTree" to="AnimationController" method="_on_animation_tree_animation_finished"]

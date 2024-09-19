@@ -21,12 +21,12 @@ func _physics_process(delta):
 	
 	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
-		movement_controller.jump(direction)
+		movement_controller.Jump(direction)
 	
 	if Input.is_action_pressed("crouch"):
-		movement_controller.is_crouching = true
+		movement_controller.EnterCrouch()
 	else:
-		movement_controller.is_crouching = false
+		movement_controller.ExitCrouch()
 
-	movement_controller.move(direction)
+	movement_controller.Move(direction)
 	move_and_slide()

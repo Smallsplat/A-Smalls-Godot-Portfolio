@@ -27,11 +27,10 @@ func Landed():
 func Jump():
 	if (playback.get_current_node() == "Move") or (playback.get_current_node() == "Landing"):
 		playback.travel("Jump")
-	
 func Fall():
 	if (playback.get_current_node() == "Move"):
 		playback.travel("Falling")
 
 func _on_animation_tree_animation_finished(anim_name):
 	if (anim_name == "Landing"):
-		character.state_machine.SwitchStates("grounded")
+		character.state_machine.SwitchStates(character.state_machine.CalculateState())
