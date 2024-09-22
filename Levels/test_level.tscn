@@ -13,18 +13,9 @@ size = Vector2(256, 256)
 [node name="Player" parent="." instance=ExtResource("1_2ngr8")]
 position = Vector2(-28, 30)
 
-[node name="RemoteCameraTransform2D" type="RemoteTransform2D" parent="Player"]
-position = Vector2(-1, -8)
-remote_path = NodePath("../../Camera2D")
-
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_sickk")
 format = 2
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-29, 22)
-process_callback = 0
-position_smoothing_enabled = true
 
 [node name="GreyGridTexture" type="Sprite2D" parent="."]
 position = Vector2(-1, 232)
@@ -172,7 +163,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture17" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(1542, -86)
+position = Vector2(1350, -244)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture17"]
@@ -182,8 +173,30 @@ visible = false
 visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
+[node name="GreyGridTexture20" type="Sprite2D" parent="GreyGridTexture2"]
+position = Vector2(1034, -220)
+texture = ExtResource("3_1awvc")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture20"]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/GreyGridTexture20/StaticBody2D"]
+visible = false
+shape = SubResource("RectangleShape2D_wknm5")
+
+[node name="GreyGridTexture21" type="Sprite2D" parent="GreyGridTexture2"]
+position = Vector2(724, -277)
+texture = ExtResource("3_1awvc")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture21"]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/GreyGridTexture21/StaticBody2D"]
+visible = false
+shape = SubResource("RectangleShape2D_wknm5")
+
 [node name="GreyGridTexture19" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(1695, -526)
+position = Vector2(1667, -184)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture19"]
@@ -194,7 +207,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture18" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(1192, -85)
+position = Vector2(1351, 7)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture18"]

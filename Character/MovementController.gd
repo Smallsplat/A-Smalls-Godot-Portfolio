@@ -6,7 +6,7 @@ class_name MovementController
 @export var wall_run_raycast: RayCast2D
 @export var ground_raycast: RayCast2D
 @export var edge_detector: RayCast2D
-@export var debug_raycast: RayCast2D
+@export var roof_raycast: RayCast2D
 
 # Movement Variables
 @export var run_speed : float = 200.0
@@ -32,6 +32,8 @@ class_name MovementController
 @export var wall_jump_velocity: float = -100.0
 @export var wall_jump_blocker: float = 0.2
 @export var wall_jump_frame_buffer: float = 6
+
+@export var min_powerlanding_speed : float = 250
 # Player managers
 @export var state_machine : CharacterStateMachine
 @export var animation_controller : AnimationController
@@ -52,9 +54,15 @@ var character_velocty_last_frame : Vector2 = Vector2(0,0)
 # Ground Normals for SLiding
 var ground_normal : Vector2 = Vector2(0,0)
 var ground_forward_normal : Vector2 = Vector2(0,0)
+# Roof Launch Memeory
+var roof_launch_blocker : bool = false
+var roof_launch_velocity : float = 0
+# Power Landing Memeory
+var power_land_blocker : bool = false
+var power_land_veocity : Vector2 = Vector2(0,0)
+var power_land_active : bool = false
 
 func MovementPhysicsProcess(delta):
-	debug_raycast.target_position = Vector2((character.velocity.normalized().x * abs(character.velocity.x)), (character.velocity.normalized().y* abs(character.velocity.y)))
 	#Manage touching the Floor
 	if character.is_on_floor():
 		if not on_ground: 		# Change on_ground vairable to prevent function spam
@@ -63,6 +71,7 @@ func MovementPhysicsProcess(delta):
 			state_machine.SwitchStates("landing")
 			character.velocity.x += (character_velocty_last_frame.y/2) * (ground_forward_normal.y * movement_direction_x)# Speed boost on landing on slopes
 	else:						# Check if we've fallen (off a ledge)
+		# Manage coyote time if we've fallen
 		if on_ground && state_machine.current_state != "wallrunning":
 			coyote_time_active = true
 			coyote_counter += 1
@@ -104,15 +113,31 @@ func MovementPhysicsProcess(delta):
 	else: 
 		edge_detector.target_position.y = 18
 	edge_detector.target_position.x = coyote_jump_edge_finder_bonus * movement_direction_x
-	if not edge_detector.is_colliding() && CurrentState(["grounded","crouching"]):
+	if not edge_detector.is_colliding() && CurrentState(["grounded","crouching", "landing"]):
 		coyote_time_active = true
 	else:
 		coyote_time_active = false
-
+		
 	#Increase floor snapping for if we're on a slope to not bounce off it
 	var floor_snap_var = 20 if ((CurrentState(["crouching"]) or GetFutureState() == "crouching") && ground_raycast.is_colliding() && (ground_raycast.get_collision_normal().x != 0))else 5
 	character.floor_snap_length = floor_snap_var
+	
+	# Roof Blocker Velocity Calculation
+	if roof_raycast.is_colliding() && not roof_launch_blocker:
+		roof_launch_blocker = true
+		roof_launch_velocity = (character_velocty_last_frame.y + (jump_velocity * -1))
+	else:
+		roof_launch_blocker = false
 
+	# Power Landing Vecloity Calculation
+	if ground_raycast.is_colliding() && not power_land_blocker && ground_forward_normal.y == 0:
+		if CurrentState(["airal"]) && character.velocity.y > min_powerlanding_speed && (character.velocity.y > (character.velocity.y + abs(character.velocity.x)) * 0.6):
+			power_land_blocker = true
+			power_land_veocity = character_velocty_last_frame
+			print ("blocked")
+	elif not ground_raycast.is_colliding() && power_land_blocker:
+		print ("releaced")
+		power_land_blocker = false
 	character_velocty_last_frame = character.velocity
 
 func Jump(direction : Vector2): # Called From Player Controller
@@ -126,7 +151,8 @@ func Jump(direction : Vector2): # Called From Player Controller
 			#Are we in Coyote Time
 			if coyote_time_active:
 				coyote_time_active = false
-				var coyote_boost = 2.5 if CurrentState(["crouching"]) else 1.0 #Coyote Time Crouch Boosting
+				var coyote_boost = 2.5 if (CurrentState(["crouching"]) or GetFutureState() == "crouching" or GetFutureState() == "airal") else 1.0 #Coyote Time Crouch Boosting
+				print (GetFutureState())
 				character.velocity.x += (coyote_jump_distance * direction.x) * coyote_boost
 				character.velocity.y = coyote_jump_hieght
 			else:
@@ -134,9 +160,12 @@ func Jump(direction : Vector2): # Called From Player Controller
 			state_machine.SwitchStates("airal")
 			
 		# Jumping while in the air
-		elif CurrentState(["airal"]) && double_jump_valid:
-			character.velocity.y = double_jump_velocity
-			double_jump_valid = false
+		elif CurrentState(["airal"]):
+			if roof_raycast.is_colliding():
+				character.velocity.y = roof_launch_velocity
+			elif double_jump_valid:
+				character.velocity.y = double_jump_velocity
+				double_jump_valid = false
 		
 		# Jumping while wallrunning
 		elif CurrentState(["wallrunning"]):
@@ -148,6 +177,15 @@ func Jump(direction : Vector2): # Called From Player Controller
 
 func Move(direction : Vector2):
 	TryWallRun()
+	if (CurrentState(["landing"]) && GetFutureState() == "crouching") and power_land_blocker and not power_land_active:
+		character.velocity = Vector2(0,0)
+		power_land_active = true
+		
+	if direction.x and power_land_active and not CurrentState(["landing"]):
+		character.velocity.x = (abs(power_land_veocity.x) + (power_land_veocity.y /2)) * direction.x
+		print (power_land_veocity.x + (power_land_veocity.y /2) * direction.x)
+		power_land_active = false
+		
 	if CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching"):
 		ground_normal = ground_raycast.get_collision_normal()
 		if movement_direction_x < 0:
@@ -223,7 +261,7 @@ func WallRunOnEnter():
 
 func CurrentState(requested_state : Array):
 	for state in requested_state:
-		if state_machine.states.find_key(state) != null:
+		if not state_machine.states.find_key(state) == null:
 			push_error("Requested Current State, " + state + ", is not a Valid state")
 		if state_machine.current_state == state:
 			return true

@@ -325,13 +325,13 @@ parameters/Move/blend_position = 0
 script = ExtResource("1_m8b41")
 character = NodePath("..")
 
-[node name="MovementController" type="Node" parent="." node_paths=PackedStringArray("character", "wall_run_raycast", "ground_raycast", "edge_detector", "debug_raycast", "state_machine", "animation_controller")]
+[node name="MovementController" type="Node" parent="." node_paths=PackedStringArray("character", "wall_run_raycast", "ground_raycast", "edge_detector", "roof_raycast", "state_machine", "animation_controller")]
 script = ExtResource("7_p1det")
 character = NodePath("..")
 wall_run_raycast = NodePath("../WallRunRayCast")
 ground_raycast = NodePath("../GroundRayCast")
 edge_detector = NodePath("../EdgeDetector")
-debug_raycast = NodePath("../Debug Raycast")
+roof_raycast = NodePath("../RoofRaycast")
 brake_force = 20.0
 overspeed_multi = 2
 coyote_jump_edge_finder_bonus = 15.0
@@ -345,7 +345,7 @@ player_sprite = NodePath("../PlayerSprite")
 animation_tree = NodePath("../AnimationTree")
 
 [node name="WallRunRayCast" type="RayCast2D" parent="."]
-position = Vector2(0, -14)
+visible = false
 target_position = Vector2(-10, 0)
 
 [node name="GroundRayCast" type="RayCast2D" parent="."]
@@ -353,12 +353,20 @@ position = Vector2(-1, 17)
 target_position = Vector2(0, 20)
 
 [node name="EdgeDetector" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(-1, 0)
 target_position = Vector2(0, 18)
 
-[node name="Debug Raycast" type="RayCast2D" parent="."]
+[node name="RoofRaycast" type="RayCast2D" parent="."]
 visible = false
 position = Vector2(-1, -15)
-target_position = Vector2(18, 0)
+target_position = Vector2(0, -10)
+
+[node name="RemoteCameraTransform2D" type="RemoteTransform2D" parent="."]
+remote_path = NodePath("../Camera2D")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+process_callback = 0
+position_smoothing_enabled = true
 
 [connection signal="animation_finished" from="AnimationTree" to="AnimationController" method="_on_animation_tree_animation_finished"]
