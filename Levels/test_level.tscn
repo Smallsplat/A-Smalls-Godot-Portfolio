@@ -11,7 +11,7 @@ size = Vector2(256, 256)
 [node name="TestLevel" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_2ngr8")]
-position = Vector2(-28, 30)
+position = Vector2(-1, 70)
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_sickk")
@@ -37,30 +37,6 @@ texture = ExtResource("3_1awvc")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/StaticBody2D"]
 shape = SubResource("RectangleShape2D_wknm5")
 
-[node name="GreyGridTexture2" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(236, 15)
-rotation = 0.122173
-texture = ExtResource("3_1awvc")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture2"]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/GreyGridTexture2/StaticBody2D"]
-visible = false
-shape = SubResource("RectangleShape2D_wknm5")
-
-[node name="GreyGridTexture9" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(379, 84)
-rotation = 0.785398
-texture = ExtResource("3_1awvc")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture9"]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/GreyGridTexture9/StaticBody2D"]
-visible = false
-shape = SubResource("RectangleShape2D_wknm5")
-
 [node name="GreyGridTexture10" type="Sprite2D" parent="GreyGridTexture2"]
 position = Vector2(611, 252)
 rotation = 0.471239
@@ -70,6 +46,32 @@ texture = ExtResource("3_1awvc")
 visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/GreyGridTexture10/StaticBody2D"]
+visible = false
+shape = SubResource("RectangleShape2D_wknm5")
+
+[node name="GreyGridTexture22" type="Sprite2D" parent="GreyGridTexture2"]
+position = Vector2(224.203, 25.0937)
+rotation = 0.223402
+scale = Vector2(0.998291, 0.999637)
+texture = ExtResource("3_1awvc")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture22"]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/GreyGridTexture22/StaticBody2D"]
+visible = false
+shape = SubResource("RectangleShape2D_wknm5")
+
+[node name="GreyGridTexture23" type="Sprite2D" parent="GreyGridTexture2"]
+position = Vector2(395, 122)
+rotation = 0.688918
+scale = Vector2(1.06985, 1.07949)
+texture = ExtResource("3_1awvc")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture23"]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/GreyGridTexture23/StaticBody2D"]
 visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
@@ -118,7 +120,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture4" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(-759, -254)
+position = Vector2(-821, -256)
 rotation = 3.14159
 texture = ExtResource("3_1awvc")
 
@@ -162,8 +164,19 @@ visible = false
 visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
+[node name="GreyGridTexture24" type="Sprite2D" parent="GreyGridTexture2"]
+position = Vector2(1191, -298)
+texture = ExtResource("3_1awvc")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture24"]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreyGridTexture2/GreyGridTexture24/StaticBody2D"]
+visible = false
+shape = SubResource("RectangleShape2D_wknm5")
+
 [node name="GreyGridTexture17" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(1350, -244)
+position = Vector2(1556, -671)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture17"]
@@ -174,7 +187,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture20" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(1034, -220)
+position = Vector2(1974, -499)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture20"]
@@ -185,7 +198,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture21" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(724, -277)
+position = Vector2(766, -317)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture21"]
@@ -207,7 +220,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture18" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(1351, 7)
+position = Vector2(1362, 46)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture18"]
@@ -218,7 +231,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture6" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(-431, -348)
+position = Vector2(-401, -347)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture6"]
@@ -229,7 +242,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture7" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(-179, -348)
+position = Vector2(-149, -347)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture7"]
@@ -240,7 +253,7 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture8" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(-759, -506)
+position = Vector2(-821, -508)
 rotation = 3.14159
 texture = ExtResource("3_1awvc")
 
