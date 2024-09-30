@@ -7,9 +7,20 @@ extends CharacterBody2D
 @onready var animation_controller : AnimationController = $AnimationController
 @onready var animation_tree : AnimationTree = $AnimationTree
 @onready var playback = animation_tree["parameters/playback"]
-@onready var camera_position : RemoteTransform2D = $RemoteCameraTransform2D
-# Get the gravity from the project settings to be synced with RigidBody nodes.
+const camera = preload("res://Character/player_camera.tscn")
+var player_camera
+
+@export var camera_movement_speed : float = 15000
+@export var camera_minimum_speed : float = 0.25
+@export var camera_bounds : Vector2 = Vector2(0.35, 0.40)
+
 var direction : Vector2 = Vector2.ZERO
+var camera_position : RemoteTransform2D
+
+func _ready():
+	var instanced_camera = camera.instantiate()
+	get_tree().get_root().add_child.call_deferred(instanced_camera)
+	player_camera = instanced_camera
 	
 func _physics_process(delta):
 	animation_controller.AnimationPhysicsProcess()
@@ -40,9 +51,28 @@ func _process(_delta):
 	move_camera()
 
 func move_camera():
-	var look_forward : Vector2 = Vector2((velocity.normalized().x * abs(velocity.x)), (velocity.normalized().y* abs(velocity.y)))
-	look_forward = look_forward.clamp((get_viewport_rect().size * -0.25), get_viewport_rect().size * 0.25) 
-	var camera_speed: Vector2 = Vector2(abs(camera_position.position.x - look_forward.x),abs(camera_position.position.y - look_forward.y))
-	camera_speed = Vector2(camera_speed.x / 500, camera_speed.y / 500)
-	camera_position.position.x = move_toward(camera_position.position.x, look_forward.x, camera_speed.x)
-	camera_position.position.y = move_toward(camera_position.position.y, look_forward.y, camera_speed.y)
+	if player_camera:
+		var player_velocity = get_real_velocity()
+		# Add Player Velocity Offset
+		var look_forward : Vector2 = Vector2((player_velocity.normalized().x * abs(player_velocity.x)), (player_velocity.normalized().y* abs(velocity.y)))
+		# Clamp Player Velocity to keep character on screen
+		look_forward.x = clamp(look_forward.x,((get_viewport_rect().size.x * -camera_bounds.x)), get_viewport_rect().size.x * camera_bounds.y)
+		look_forward.y = clamp(look_forward.y,((get_viewport_rect().size.y * -camera_bounds.y)), get_viewport_rect().size.y * camera_bounds.y)
+		# Add Player Position
+		look_forward = look_forward + self.position
+		# Add Offset
+		look_forward.y -= movement_controller.player_hitbox.shape.height
+		
+		#Adjust camera speed based on distance from characeter - further = faster
+		var camera_speed: Vector2 = Vector2(abs(player_camera.position.x - look_forward.x),abs(player_camera.position.y - look_forward.y))
+		#Adjust camera speed based on player velocity, - faster = faster
+		camera_speed = Vector2((camera_speed.x / (camera_movement_speed / abs(player_velocity.x))), (camera_speed.y / (camera_movement_speed / abs(player_velocity.y))))
+		# Adjust Camera speed if too slow
+		if camera_speed.x < camera_minimum_speed:
+			camera_speed.x = camera_minimum_speed
+		if camera_speed.y < camera_minimum_speed:
+			camera_speed.y = camera_minimum_speed
+		
+		#Finally move the damn camera
+		player_camera.position.x = move_toward(player_camera.position.x, look_forward.x, camera_speed.x)
+		player_camera.position.y = move_toward(player_camera.position.y, look_forward.y, camera_speed.y)

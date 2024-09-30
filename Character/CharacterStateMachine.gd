@@ -4,7 +4,6 @@ class_name CharacterStateMachine
 
 @export var character : CharacterBody2D
 
-
 enum states {grounded, airal, crouching, landing, wallrunning, walljumping, powerstance, roofslam}
 
 @onready var current_state = states.keys()[states.grounded]
@@ -60,6 +59,8 @@ func StateOnExit(state : String):
 func CalculateState():
 	if character.is_on_floor():
 		if Input.is_action_pressed("crouch"):
+			return "crouching"
+		elif current_state == "crouching" && character.movement_controller.roof_raycast.is_colliding():
 			return "crouching"
 		else:
 			return "grounded"

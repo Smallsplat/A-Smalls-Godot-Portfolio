@@ -322,6 +322,8 @@ func ToggleCrouchHitbox(is_crouching : bool):
 	if is_crouching:
 		player_hitbox.shape.height = (default_rect_size*0.4)
 		player_hitbox.position.y = 13
+		roof_raycast.position.y = 7
 	else:
 		player_hitbox.shape.height = default_rect_size
 		player_hitbox.position.y = 0
+		roof_raycast.position.y = -21

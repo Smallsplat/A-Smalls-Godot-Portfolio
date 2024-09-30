@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dpysnthsmefou"]
+
+[node name="Player Camera" type="RemoteTransform2D"]
+remote_path = NodePath("Camera2D")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+process_callback = 0
+position_smoothing_enabled = true

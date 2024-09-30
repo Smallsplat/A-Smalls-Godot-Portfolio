@@ -63,9 +63,9 @@ visible = false
 shape = SubResource("RectangleShape2D_wknm5")
 
 [node name="GreyGridTexture23" type="Sprite2D" parent="GreyGridTexture2"]
-position = Vector2(395, 122)
+position = Vector2(395.015, 122.173)
 rotation = 0.688918
-scale = Vector2(1.06985, 1.07949)
+scale = Vector2(1.0689, 1.07852)
 texture = ExtResource("3_1awvc")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="GreyGridTexture2/GreyGridTexture23"]
