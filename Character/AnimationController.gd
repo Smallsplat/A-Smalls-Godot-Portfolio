@@ -45,11 +45,9 @@ func AnimationPhysicsProcess():
 	if (playback.get_current_node() == "Falling"):
 		if ((sign(character.direction.x) != sign(character.velocity.x))) and (character.direction.x != 0):
 			playback.travel("Airal Turnaround")
-			print ("Turnaround Start")
 	if (playback.get_current_node() == "Airal Turnaround"):
 		if (sign(character.direction.x) == sign(character.velocity.x)):
 			playback.travel("Falling")
-			print ("Turnaround End")
 
 func DirectionSpriteFlip():
 	#Flip sprite based on direction
@@ -67,7 +65,6 @@ func Landed():
 	else:
 		power_land = 0
 	
-	#print (power_land, character.movement_controller.power_land_active)
 	animation_tree.set("parameters/Landing/blend_position", power_land)
 	
 	if (playback.get_current_node() == "Falling") or (playback.get_current_node() == "Airal Turnaround"):

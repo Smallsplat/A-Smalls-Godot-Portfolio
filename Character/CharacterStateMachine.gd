@@ -4,7 +4,7 @@ class_name CharacterStateMachine
 
 @export var character : CharacterBody2D
 
-enum states {grounded, airal, crouching, landing, wallrunning, walljumping, powerstance, roofslam}
+enum states {grounded, airal, crouching, landing, wallrunning, walljumping, roofslam}
 
 @onready var current_state = states.keys()[states.grounded]
 
@@ -41,6 +41,7 @@ func StateOnEnter(state : String):
 			character.animation_controller.Fall()
 	if state == "wallrunning":
 		character.animation_controller.WallRun()
+		character.movement_controller.ToggleCrouchHitbox(false)
 	if state == "walljumping":
 		character.animation_controller.Jump()
 	if state == "roofslam":

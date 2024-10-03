@@ -21,6 +21,7 @@ func _ready():
 	var instanced_camera = camera.instantiate()
 	get_tree().get_root().add_child.call_deferred(instanced_camera)
 	player_camera = instanced_camera
+	player_camera.position = self.position
 	
 func _physics_process(delta):
 	animation_controller.AnimationPhysicsProcess()
