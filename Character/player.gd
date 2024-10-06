@@ -41,9 +41,9 @@ func _physics_process(delta):
 	if is_on_floor():
 		var ground_normal = movement_controller.ground_raycast.get_collision_normal()
 		var ground_forward_normal = Vector2(-ground_normal.y, ground_normal.x)
-		self.rotation = ground_forward_normal.angle()
+		self.rotation = move_toward(self.rotation, ground_forward_normal.angle(), 0.15)
 	else:
-		self.rotation = 0
+		self.rotation = move_toward(self.rotation, 0, 0.15)
 	
 	movement_controller.Move(direction)
 	move_and_slide()

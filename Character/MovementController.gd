@@ -20,14 +20,19 @@ class_name MovementController
 @export var acceleration : float = 20.0
 @export var brake_force : float = 5.0
 @export var jump_velocity : float = -200.0
-@export var min_slide_speed : float = 100.0
 @export var overspeed_multi : Vector2 = Vector2(1,2)
+
+@export_group("Sliding")
+@export var min_slide_speed : float = 100.0
+@export var slide_acceleration : float = 2
+@export var slide_breaking : float = 2
 
 @export_group("Coyote Jumping")
 @export var coyote_frames: float = 10
 @export var coyote_jump_edge_finder_bonus: float = 10
 @export var coyote_jump_distance: float = 50
 @export var coyote_jump_hieght: float = -150
+@export var coyote_crouch_mod: float = 2
 
 @export_group("Air Control")
 @export var double_jump_velocity : float = -100
@@ -51,9 +56,11 @@ class_name MovementController
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var on_ground : bool = true
 var jumping : bool = false
+var sliding : bool = false
 var double_jump_valid : bool = true
 var coyote_counter : float = 0
 
+var slide_velocity :Vector2 = Vector2(0,0)
 #Wall Running
 var wall_buffer_counter : float = 0
 var wall_direction : float = 0
@@ -84,7 +91,7 @@ func MovementPhysicsProcess(delta):
 			on_ground = true
 			jumping = false
 			state_machine.SwitchStates("landing")
-			character.velocity.x += (character_velocty_last_frame.y/2) * (ground_forward_normal.y * movement_direction_x)# Speed boost on landing on slopes
+			character.apply_floor_snap()
 	else:						# Check if we've fallen (off a ledge)
 		# Manage coyote time if we've fallen
 		if on_ground && state_machine.current_state != "wallrunning":
@@ -109,19 +116,11 @@ func MovementPhysicsProcess(delta):
 	# Simplify left/right	
 	if (character.velocity.x > 0):
 		movement_direction_x = 1
-	#elif (character.velocity.x == 0):
-		#movement_direction_x = 0
-	else:
+	elif (character.velocity.x < 0):
 		movement_direction_x = -1
 	
-	# Get ground forward Normals
-	ground_normal = ground_raycast.get_collision_normal()
-	if movement_direction_x < 0:
-		ground_forward_normal = Vector2(ground_normal.y, -ground_normal.x)
-	elif movement_direction_x > 0:
-		ground_forward_normal = Vector2(-ground_normal.y, ground_normal.x)
-		
 	# Coyote Jump Extender
+	CalculateGroundForwardNormal()
 	if (ground_raycast.get_collision_normal().x != 0):
 		# This calculation is scuffed. We could do better, but this works for now.
 		edge_detector.target_position.y = 26 + (24 * ((ground_raycast.get_collision_normal().y + 1)*2))
@@ -134,9 +133,15 @@ func MovementPhysicsProcess(delta):
 		coyote_time_active = false
 		
 	#Increase floor snapping for if we're on a slope to not bounce off it
-	ground_raycast.target_position.y = 5
-	var floor_snap_var = 25 if ((CurrentState(["crouching"]) or GetFutureState() == "crouching") && ground_raycast.is_colliding() && (ground_raycast.get_collision_normal().x != 0))else 10
+	if on_ground:
+		ground_raycast.target_position.y = 25
+	else:
+		ground_raycast.target_position.y = 45
+	var floor_snap_var = 300 if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && (ground_raycast.get_collision_normal().x != 0) && ground_raycast.is_colliding())else 10
 	character.floor_snap_length = floor_snap_var
+	if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && (ground_raycast.get_collision_normal().x != 0) && ground_raycast.is_colliding()) && not jumping:
+		character.apply_floor_snap()
+	
 	
 	# Roof Blocker Velocity Calculation
 	if roof_raycast.is_colliding() && not roof_launch_blocker:
@@ -144,18 +149,22 @@ func MovementPhysicsProcess(delta):
 		roof_launch_velocity = (character_velocty_last_frame.y + (jump_velocity * -1))
 	else:
 		roof_launch_blocker = false
+		
+	if character.is_on_floor() && CurrentState(["airal"]):
+		state_machine.SwitchStates(state_machine.CalculateState())
 
 	# Power Landing Vecloity Calculation
-
-	#If we're arial, Our character velocity is greater than the minimum, and oer 60% of our velocity is vertical
+	#If we're arial, Our character velocity is greater than the minimum, and over 60% of our velocity is vertical
 	if CurrentState(["airal"]) && character.velocity.y > min_powerlanding_speed && (character.velocity.y > (character.velocity.y + abs(character.velocity.x)) * powerlanding_y_ratio):
-		ground_raycast.target_position.y = 40
 		if ground_raycast.is_colliding() && not power_land_velo_blocker && ground_forward_normal.y == 0:
 			power_land_velo_blocker = true
 			power_land_veocity = character_velocty_last_frame
 	elif not ground_raycast.is_colliding() && power_land_velo_blocker:
 		power_land_velo_blocker = false
 		
+	if not character.is_on_floor():#ground_raycast.is_colliding():
+		slide_velocity = character.velocity
+	
 	character_velocty_last_frame = character.velocity
 
 func Jump(direction : Vector2): # Called From Player Controller
@@ -169,20 +178,21 @@ func Jump(direction : Vector2): # Called From Player Controller
 			#Are we in Coyote Time
 			if coyote_time_active:
 				coyote_time_active = false
-				var coyote_boost = 2.5 if (CurrentState(["crouching"]) or GetFutureState() == "crouching") else 1.0 #Coyote Time Crouch Boosting
+				var coyote_boost = coyote_crouch_mod if (CurrentState(["crouching"]) or GetFutureState() == "crouching") else 1.0 #Coyote Time Crouch Boosting
 				character.velocity.x += (coyote_jump_distance * direction.x) * coyote_boost
-				character.velocity.y = coyote_jump_hieght
+				character.velocity.y = coyote_jump_hieght * (1 + abs(ground_forward_normal.y)/4)
 				state_machine.SwitchStates("airal")
 			#Make sure we're not Power landing
 			elif not power_land_active:
-				character.velocity.y = jump_velocity
+				character.velocity.y = jump_velocity * (1 + abs(ground_forward_normal.y)/4)
 				state_machine.SwitchStates("airal")
 			
 		# Jumping while in the air
 		elif CurrentState(["airal", "walljumping"]):
 			# Roof Slam
 			if roof_raycast.is_colliding():
-				character.velocity.y = roof_launch_velocity
+				character.velocity.y = roof_launch_velocity + abs(character.velocity.x / 4)
+				character.velocity.x = character.velocity.x / 4
 				state_machine.SwitchStates("roofslam")
 				await get_tree().create_timer(0.2).timeout
 				state_machine.SwitchStates(GetFutureState())
@@ -211,14 +221,22 @@ func Move(direction : Vector2): # INPUT FUNCTION - Inputs Character Inputs from 
 	#If we're landing, pressing the crouch button, and have a valid Power landing
 	if (CurrentState(["landing"]) && GetFutureState() == "crouching") and power_land_velo_blocker and not power_land_active:
 		PowerLandStart()
+		
+	#If we're sliding (Or about to be sliding while landing)
+	elif (CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) and not power_land_velo_blocker:
+		if sliding:
+			Slide()
+		else: 
+			SlideOnEnter()
+	else:
+		sliding = false
 	
 	#If we're Pressing a direction, We're Power-landed, and the ANiamtion timer is over, Launch the player.
 	if direction.x and power_land_active and CurrentState(["landing"]) and (not power_land_timeout_blocker):
 		PowerLandLaunch()
 	
-	#If we're sliding (Or about to be sliding while landing)
-	if CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching"):
-		Slide()
+	
+
 	
 	#If we're grounded (Or about to be grounded while landing)
 	if CurrentState(["grounded"]) or (CurrentState(["landing"]) && (GetFutureState() == "grounded")):
@@ -254,22 +272,33 @@ func Run(direction : Vector2):
 	else:
 		character.velocity.x = move_toward(character.velocity.x, 0, brake_force)
 	
+func SlideOnEnter():
+	# Nerf slide boosts on uphills
+	if sign(ground_normal.x) != sign(slide_velocity.x):
+		#print ("Misaligned Slide!")
+		slide_velocity.x *= 1 - abs(ground_normal.x / 4)
+		
+	if CurrentState(["landing"]) or slide_velocity == Vector2(0,0):
+		if abs(slide_velocity.y) < jump_velocity:
+			slide_velocity.y = 0
+		else:
+			slide_velocity.y += jump_velocity
+		character.velocity = ground_forward_normal * slide_velocity.length()
+		print ("Slide Velo", slide_velocity, "Car Velo", character.velocity)
+		slide_velocity = Vector2(0,0)
+	else:
+		character.velocity = ground_forward_normal * character_velocty_last_frame.length()
+	sliding = true
+	
 func Slide():
-	ground_normal = ground_raycast.get_collision_normal()
-	#Calcualte Ground Normal relitive to Player Direction
-	if movement_direction_x < 0:
-		ground_forward_normal = Vector2(ground_normal.y, -ground_normal.x)
-	elif movement_direction_x > 0:
-		ground_forward_normal = Vector2(-ground_normal.y, ground_normal.x)
-
 	#If player is going slower than Minimum slide speed
 	if (abs(character.velocity.x) < min_slide_speed) and (not power_land_active):
-		character.velocity += ground_forward_normal*2
+		character.velocity += ground_forward_normal*slide_acceleration
 	#else, work out if we should speed up Player direction based on ground slope
 	elif ((ground_normal.x > 0 && character.velocity.x > 0) or (ground_normal.x < 0 && character.velocity.x < 0)):
-		character.velocity += ground_forward_normal*2
+		character.velocity += ground_forward_normal*slide_acceleration
 	elif not ((ground_normal.x >= 0 && character.velocity.x > 0) or (ground_normal.x <= 0 && character.velocity.x < 0)):
-		character.velocity.x -= ground_forward_normal.x*2
+		character.velocity.x -= ground_forward_normal.x*slide_breaking
 
 func AirControl(direction : Vector2):
 	if direction.x:
@@ -295,11 +324,12 @@ func WallRun():
 		var space_state = character.get_world_2d().direct_space_state
 		var ground_query = PhysicsRayQueryParameters2D.create(character.global_position + Vector2((wall_direction * (player_hitbox.shape.radius + 3)),0), character.global_position + Vector2((wall_direction * (player_hitbox.shape.radius + 3)), 50))
 		var ground_result = space_state.intersect_ray(ground_query)
-		var wall_query = PhysicsRayQueryParameters2D.create(character.global_position + Vector2(0,default_rect_size/2),character.global_position + Vector2((wall_direction * (player_hitbox.shape.radius + 10)),default_rect_size/2), int(pow(2,2-1)))
-		var wall_result = space_state.intersect_ray(wall_query)
+		#var wall_query = PhysicsRayQueryParameters2D.create(character.global_position + Vector2(0,default_rect_size/2),character.global_position + Vector2((wall_direction * (player_hitbox.shape.radius + 10)),default_rect_size/2), int(pow(2,2-1)))
+		#var wall_result = space_state.intersect_ray(wall_query)
 		
-		#if we're crouched and tehres no wall and theres floor to mantle, mantle
-		if Input.is_action_pressed("crouch") && ground_result && not wall_result: #wall_result.normal.x) != 1:
+		#if we're crouched and theres no wall and theres floor to mantle, mantle
+		# THIS IS COMMENTED OUT TO MADE A DECITION ABOUT LATER. ISSUE IS THAT RELEACING CROUCH IS UNINTUITIVE
+		if not true:#Input.is_action_pressed("crouch") && ground_result && not wall_result:
 			#Teleport to the top of the floor to ensure location
 			character.position =  ground_result.position - Vector2(0,default_rect_size/2)
 			#Stop character vertical movement to roll over the top
@@ -395,16 +425,25 @@ func GetFutureState():
 	return character.state_machine.CalculateState()
 
 @onready var default_rect_size : float = player_hitbox.shape.height
+
 func ToggleCrouchHitbox(is_crouching : bool):
 	if is_crouching:
 		player_hitbox.shape.height = (default_rect_size*0.4)
-		player_hitbox.position.y = 13
+		player_hitbox.position.y = 13 #ground_raycast.get_collision_point().y - character.position.y - ((default_rect_size*0.4)/ 2)#13
 		roof_raycast.position.y = 7
 		roof_raycast.target_position.y = -21
+		character.apply_floor_snap()
 	else:
 		player_hitbox.shape.height = default_rect_size
 		player_hitbox.position.y = 0
 		roof_raycast.position.y = -21
 		roof_raycast.target_position.y = -10
-		
+		character.apply_floor_snap()
+
+func CalculateGroundForwardNormal():
+	ground_normal = ground_raycast.get_collision_normal()
+	if movement_direction_x < 0:
+		ground_forward_normal = Vector2(ground_normal.y, -ground_normal.x)
+	elif movement_direction_x > 0:
+		ground_forward_normal = Vector2(-ground_normal.y, ground_normal.x)
 

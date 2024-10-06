@@ -1063,9 +1063,9 @@ states/End/position = Vector2(1253, 100)
 states/Falling/node = SubResource("AnimationNodeAnimation_c3wi3")
 states/Falling/position = Vector2(758, -127)
 states/Jump/node = SubResource("AnimationNodeBlendSpace1D_0fbxn")
-states/Jump/position = Vector2(446, 100)
+states/Jump/position = Vector2(392, 100)
 states/Landing/node = SubResource("AnimationNodeBlendSpace1D_ahen4")
-states/Landing/position = Vector2(758, 285)
+states/Landing/position = Vector2(758, 290.234)
 "states/Landing Exit/node" = SubResource("AnimationNodeAnimation_l6sgg")
 "states/Landing Exit/position" = Vector2(758, 372)
 states/Move/node = SubResource("AnimationNodeBlendSpace1D_kjv6v")
@@ -1084,7 +1084,7 @@ states/Start/position = Vector2(-39, 100)
 states/WallClimb/node = SubResource("AnimationNodeAnimation_ucnin")
 states/WallClimb/position = Vector2(175, -127)
 transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_aqf70"), "Move", "Falling", SubResource("AnimationNodeStateMachineTransition_yc1rk"), "Falling", "Landing", SubResource("AnimationNodeStateMachineTransition_ud4cc"), "Landing", "Move", SubResource("AnimationNodeStateMachineTransition_xj70f"), "Move", "WallClimb", SubResource("AnimationNodeStateMachineTransition_607s3"), "WallClimb", "Falling", SubResource("AnimationNodeStateMachineTransition_otein"), "Slide", "Falling", SubResource("AnimationNodeStateMachineTransition_rlyca"), "Slide", "WallClimb", SubResource("AnimationNodeStateMachineTransition_7awes"), "Landing", "Landing Exit", SubResource("AnimationNodeStateMachineTransition_kk5ht"), "Landing Exit", "Move", SubResource("AnimationNodeStateMachineTransition_st80q"), "Slide Pre Entry", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_1itmf"), "Slide Entry", "Slide", SubResource("AnimationNodeStateMachineTransition_mx4kx"), "Landing", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_58e5j"), "Landing Exit", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_otm48"), "Move", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_lkhqq"), "Move", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_ragh2"), "Falling", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_sjgel"), "Landing", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_ns4cw"), "Slide Entry", "Landing", SubResource("AnimationNodeStateMachineTransition_r51jn"), "Slide", "Slide Exit", SubResource("AnimationNodeStateMachineTransition_pesv0"), "Slide Exit", "Move", SubResource("AnimationNodeStateMachineTransition_crhqg"), "Move", "Jump", SubResource("AnimationNodeStateMachineTransition_tuiu2"), "WallClimb", "Jump", SubResource("AnimationNodeStateMachineTransition_hew82"), "Slide", "Jump", SubResource("AnimationNodeStateMachineTransition_r8qkl"), "Jump", "Falling", SubResource("AnimationNodeStateMachineTransition_afbmf"), "Jump", "Landing", SubResource("AnimationNodeStateMachineTransition_lkcdh"), "Slide Entry", "Jump", SubResource("AnimationNodeStateMachineTransition_1t6vo"), "Slide Exit", "Jump", SubResource("AnimationNodeStateMachineTransition_y8xwm"), "Landing Exit", "Jump", SubResource("AnimationNodeStateMachineTransition_usd7r"), "Landing", "Jump", SubResource("AnimationNodeStateMachineTransition_dski3"), "Move", "Move Turnaround", SubResource("AnimationNodeStateMachineTransition_884eu"), "Move Turnaround", "Move", SubResource("AnimationNodeStateMachineTransition_kxyb0"), "Falling", "Airal Turnaround", SubResource("AnimationNodeStateMachineTransition_0lr3f"), "Airal Turnaround", "Falling", SubResource("AnimationNodeStateMachineTransition_ckwgb"), "Airal Turnaround", "Landing", SubResource("AnimationNodeStateMachineTransition_xa4n4"), "WallClimb", "Landing", SubResource("AnimationNodeStateMachineTransition_7og28")]
-graph_offset = Vector2(-53, -154.766)
+graph_offset = Vector2(-106, 12.234)
 
 [node name="Player" type="CharacterBody2D"]
 floor_constant_speed = true
@@ -1107,7 +1107,7 @@ libraries = {
 active = false
 tree_root = SubResource("AnimationNodeStateMachine_w2tn7")
 anim_player = NodePath("../AnimationPlayer")
-parameters/Jump/blend_position = -0.00323099
+parameters/Jump/blend_position = 0.0783086
 parameters/Landing/blend_position = 0
 parameters/Move/blend_position = 0
 
@@ -1128,8 +1128,10 @@ state_machine = NodePath("../CharacterStateMachine")
 animation_controller = NodePath("../AnimationController")
 player_hitbox = NodePath("../CollisionShape2D")
 brake_force = 10.0
+jump_velocity = -250.0
 coyote_jump_edge_finder_bonus = 20.0
-coyote_jump_distance = 57.5
+coyote_jump_distance = 40.0
+coyote_jump_hieght = -200.0
 min_powerlanding_speed = 400.0
 powerlanding_y_ratio = 0.75
 powerlanding_blocker = 0.4
@@ -1141,24 +1143,28 @@ player_sprite = NodePath("../PlayerSprite")
 animation_tree = NodePath("../AnimationTree")
 
 [node name="GroundRayCast" type="RayCast2D" parent="."]
-position = Vector2(0, 21)
-target_position = Vector2(0, 40)
+target_position = Vector2(0, 23)
 
 [node name="EdgeDetector" type="RayCast2D" parent="."]
+visible = false
 target_position = Vector2(0, 24)
 
 [node name="RoofRaycast" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(0, -21)
 target_position = Vector2(0, -10)
 
 [node name="WallRayCastHead" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(0, -20)
 target_position = Vector2(10, 0)
 
 [node name="WallRayCastChest" type="RayCast2D" parent="."]
+visible = false
 target_position = Vector2(10, 0)
 
 [node name="WallRayCastLegs" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(0, 10)
 target_position = Vector2(10, 0)
 

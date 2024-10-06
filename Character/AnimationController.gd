@@ -9,7 +9,7 @@ class_name AnimationController
 
 var power_land : float = 0
 var animation_speed_adjustment : bool = true
-
+var jump_type = 0
 # Jump ! 0 - Normal ! 1 - Wall ! 2 - roof !
 
 func _ready():
@@ -23,6 +23,7 @@ func VerifyAnimationSpeedAdjustment(state):
 	return false
 
 func AnimationPhysicsProcess():
+	#print (playback.get_current_node())
 	DirectionSpriteFlip()
 	animation_tree.set("parameters/Move/blend_position", character.direction.x) #Update walking Animations
 
@@ -75,13 +76,13 @@ func Landed():
 		playback.travel("Landing")
 		
 func Jump():
-	var jump_type = 0
 	if character.state_machine.current_state == "walljumping":
 		jump_type = 1
 	if character.state_machine.current_state == "roofslam":
 		jump_type = 2
 	else:
 		jump_type = 0
+	print ("ping", jump_type)
 	animation_tree.set("parameters/Jump/blend_position", jump_type)
 	playback.travel("Jump")
 
