@@ -1,11 +1,13 @@
 extends CharacterBody2D
 
 @onready var player_sprite : Sprite2D = $PlayerSprite
-@onready var player_collider : CollisionShape2D = $CollisionShape2D
+@onready var player_collider : CollisionShape2D = $PlayerCollidor
 @onready var state_machine : CharacterStateMachine = $CharacterStateMachine
 @onready var movement_controller : MovementController = $MovementController
 @onready var animation_controller : AnimationController = $AnimationController
 @onready var animation_tree : AnimationTree = $AnimationTree
+@onready var ui_controller : UIController = $UIController
+@onready var floor_raycast : RayCast2D = $FloorRayCast
 @onready var playback = animation_tree["parameters/playback"]
 const camera = preload("res://Character/player_camera.tscn")
 var player_camera
@@ -23,34 +25,49 @@ func _ready():
 	player_camera = instanced_camera
 	player_camera.position = self.position
 	
+	ui_controller.player_camera = player_camera
+	ui_controller.OnSpawned()
+	
+	state_machine.SwitchStates(state_machine.CalculateState())
+	
 func _physics_process(delta):
 	animation_controller.AnimationPhysicsProcess()
-	movement_controller.MovementPhysicsProcess(delta)
-	
+
 	direction = Input.get_vector("left", "right", "up", "down") # Get the input direction
 	
 	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
 		movement_controller.Jump(direction)
 	
-	if Input.is_action_pressed("crouch"):
+	if Input.is_action_just_pressed("crouch"):
 		movement_controller.EnterCrouch()
-	else:
+	if Input.is_action_just_released("crouch"):
+		movement_controller.ExitCrouch()
+	if not Input.is_action_pressed("crouch") && state_machine.current_state == "crouching":
 		movement_controller.ExitCrouch()
 		
+	movement_controller.Move(direction)
+	
+	movement_controller.MovementPhysicsProcess(delta)
+	
 	if is_on_floor():
 		var ground_normal = movement_controller.ground_raycast.get_collision_normal()
 		var ground_forward_normal = Vector2(-ground_normal.y, ground_normal.x)
 		self.rotation = move_toward(self.rotation, ground_forward_normal.angle(), 0.15)
+		movement_controller.ground_raycast.rotation = move_toward(movement_controller.ground_raycast.rotation, -ground_forward_normal.angle(), 0.15)
 	else:
 		self.rotation = move_toward(self.rotation, 0, 0.15)
+		movement_controller.ground_raycast.rotation = move_toward(movement_controller.ground_raycast.rotation, 0, 0.15)
 	
-	movement_controller.Move(direction)
+
 	move_and_slide()
 
 func _process(_delta):
 	move_camera()
 
+func IsOnFloor():
+	return floor_raycast.is_colliding()
+	
 func move_camera():
 	if player_camera:
 		var player_velocity = get_real_velocity()

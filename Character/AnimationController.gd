@@ -82,7 +82,6 @@ func Jump():
 		jump_type = 2
 	else:
 		jump_type = 0
-	print ("ping", jump_type)
 	animation_tree.set("parameters/Jump/blend_position", jump_type)
 	playback.travel("Jump")
 

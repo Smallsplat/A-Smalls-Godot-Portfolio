@@ -41,14 +41,12 @@ func StateOnEnter(state : String):
 			character.animation_controller.Fall()
 	if state == "wallrunning":
 		character.animation_controller.WallRun()
-		character.movement_controller.ToggleCrouchHitbox(false)
 	if state == "walljumping":
 		character.animation_controller.Jump()
 	if state == "roofslam":
 		character.animation_controller.Jump()
 	if state == "grounded":
 		character.animation_controller.Move()
-		character.movement_controller.ToggleCrouchHitbox(false)
 	if state == "crouching":
 		character.animation_controller.Slide()
 		character.movement_controller.ToggleCrouchHitbox(true)
@@ -56,12 +54,14 @@ func StateOnEnter(state : String):
 func StateOnExit(state : String):
 	if state == "crouching":
 		character.movement_controller.ToggleCrouchHitbox(false)
+	if state == "landing":
+		character.movement_controller.ToggleCrouchHitbox(false)
 
 func CalculateState():
-	if character.is_on_floor():
+	if character.IsOnFloor():
 		if Input.is_action_pressed("crouch"):
 			return "crouching"
-		elif current_state == "crouching" && character.movement_controller.roof_raycast.is_colliding():
+		elif (current_state == "crouching" or current_state == "landing") && character.movement_controller. RoofColliding():
 			return "crouching"
 		else:
 			return "grounded"

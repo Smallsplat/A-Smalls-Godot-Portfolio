@@ -1089,9 +1089,11 @@ graph_offset = Vector2(-106, 12.234)
 
 [node name="Player" type="CharacterBody2D"]
 floor_constant_speed = true
-floor_max_angle = 0.872665
 floor_snap_length = 20.0
 script = ExtResource("1_ii5ia")
+camera_movement_speed = null
+camera_minimum_speed = null
+camera_bounds = null
 
 [node name="PlayerSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_j1tjh")
@@ -1149,12 +1151,7 @@ animation_tree = NodePath("../AnimationTree")
 script = ExtResource("21_bk107")
 character = NodePath("..")
 
-[node name="FloorRayCast" type="RayCast2D" parent="."]
-visible = false
-target_position = Vector2(0, 23)
-
 [node name="GroundRayCast" type="RayCast2D" parent="."]
-visible = false
 target_position = Vector2(0, 25)
 
 [node name="EdgeDetector" type="RayCast2D" parent="."]
@@ -1162,23 +1159,24 @@ visible = false
 target_position = Vector2(0, 24)
 
 [node name="RoofRaycastRight" type="RayCast2D" parent="."]
-visible = false
 position = Vector2(7, -21)
 target_position = Vector2(0, -10)
 
 [node name="RoofRaycastLeft" type="RayCast2D" parent="."]
-visible = false
 position = Vector2(-7, -21)
 target_position = Vector2(0, -10)
 
 [node name="WallRayCastHead" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(0, -20)
 target_position = Vector2(10, 0)
 
 [node name="WallRayCastChest" type="RayCast2D" parent="."]
+visible = false
 target_position = Vector2(10, 0)
 
 [node name="WallRayCastLegs" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(0, 10)
 target_position = Vector2(10, 0)
 
