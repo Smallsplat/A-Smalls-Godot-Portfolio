@@ -69,6 +69,7 @@ var slide_velocity :Vector2 = Vector2(0,0)
 var wall_buffer_counter : float = 0
 var wall_direction : float = 0
 var wall_run_init_velocity : float = 0
+var wall_run_wall_pos : float = 0
 
 var coyote_time_active : bool = false
 var overspeed_limiter : Vector2 = Vector2(0,0)
@@ -124,9 +125,9 @@ func MovementPhysicsProcess(delta):
 		ground_raycast.target_position.y = 32
 	else:
 		ground_raycast.target_position.y = 45
-	var floor_snap_var = 300 if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && (ground_raycast.get_collision_normal().x != 0) && ground_raycast.is_colliding())else 10
+	var floor_snap_var = 300 if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && (ground_raycast.get_collision_normal().x != 0) && character.IsOnFloor())else 10
 	character.floor_snap_length = floor_snap_var
-	if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && ground_raycast.is_colliding()) && not jumping:
+	if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && character.IsOnFloor()) && not jumping:
 		character.apply_floor_snap()
 		# Put the player Y velocity to the ground velocity because Floor snap doesnt actually snap palyer velocity to the floor because godot hates children and babys
 		character.velocity.y = character.velocity.y * ground_forward_normal.y
@@ -139,7 +140,7 @@ func MovementPhysicsProcess(delta):
 	else:
 		roof_launch_blocker = false
 		
-	if character.is_on_floor() && CurrentState(["airal"]):
+	if character.IsOnFloor() && CurrentState(["airal"]):
 		state_machine.SwitchStates("landing")
 
 	# Power Landing Vecloity Calculation
@@ -151,11 +152,11 @@ func MovementPhysicsProcess(delta):
 	elif not ground_raycast.is_colliding() && power_land_velo_blocker:
 		power_land_velo_blocker = false
 		
-	if not character.is_on_floor():#ground_raycast.is_colliding():
-		slide_velocity = character.velocity
+	if not ground_raycast.is_colliding():
+		slide_velocity = character_velocty_last_frame
 		
 	#Manage touching the Floor
-	if character.is_on_floor():
+	if character.IsOnFloor():
 		coyote_counter = 0
 		if not on_ground: 		# Change on_ground vairable to prevent function spam
 			on_ground = true
@@ -178,8 +179,8 @@ func MovementPhysicsProcess(delta):
 func Jump(direction : Vector2): # Called From Player Controller
 	#States we're allowed to jump is
 	if CurrentState(["grounded", "airal", "landing", "wallrunning", "crouching", "walljumping"]):
-		# Jumping while on the ground
-		if CurrentState(["grounded", "crouching", "landing"]):
+		# Jumping while on the ground, Minus if we're sliding and we have a roof over our heads
+		if CurrentState(["grounded", "crouching", "landing"]) and not ((CurrentState(["crouching", "landing"])) && RoofColliding()):
 			jumping = true
 			double_jump_valid = true
 			on_ground = false
@@ -281,19 +282,20 @@ func Run(direction : Vector2):
 	
 func SlideOnEnter():
 	# Nerf slide boosts on uphills
-	if sign(ground_normal.x) != sign(slide_velocity.x):
+	if sign(ground_normal.x) != sign(slide_velocity.x) && (ground_normal.x != 0):
 		slide_velocity.x *= 1 - abs(ground_normal.x / 4)
 		
 	if CurrentState(["landing"]):
-		if not (sign(ground_normal.x) == sign(slide_velocity.x)):
-			if abs(slide_velocity.y) < jump_velocity:
+		if not (sign(ground_normal.x) == sign(slide_velocity.x) and (ground_normal.x != 0)):
+			if abs(slide_velocity.y) > jump_velocity:
 				slide_velocity.y = 0
 			else:
 				slide_velocity.y += jump_velocity
 		character.velocity = ground_forward_normal * slide_velocity.length()
+		print ("Slide Velocity ", slide_velocity.length())
 	else:
 		character.velocity = ground_forward_normal * character_velocty_last_frame.length()
-	slide_velocity = Vector2(0,0)
+		print ("Slide Last Frame")
 	sliding = true
 	character.apply_floor_snap()
 	
@@ -364,9 +366,9 @@ func TryWallRun():
 	wall_raycast_chest.target_position.x = target_X
 	wall_raycast_legs.target_position.x = target_X
 	if wall_raycast_head.is_colliding() or wall_raycast_chest.is_colliding() or wall_raycast_legs.is_colliding():
-		if wall_raycast_head.is_colliding() && not CurrentState(["crouching"]) && abs(wall_raycast_head.get_collision_normal().x) == 1:
+		if wall_raycast_head.is_colliding() && not (CurrentState(["crouching"]) or GetFutureState() == "crouching") && abs(wall_raycast_head.get_collision_normal().x) == 1:
 			collision_raycast = wall_raycast_head
-		elif wall_raycast_chest.is_colliding() && not CurrentState(["crouching"]) && abs(wall_raycast_chest.get_collision_normal().x) == 1:
+		elif wall_raycast_chest.is_colliding() && not (CurrentState(["crouching"]) or GetFutureState() == "crouching") && abs(wall_raycast_chest.get_collision_normal().x) == 1:
 			collision_raycast = wall_raycast_chest
 		elif wall_raycast_legs.is_colliding() && abs(wall_raycast_legs.get_collision_normal().x) == 1:
 			collision_raycast = wall_raycast_legs
@@ -414,6 +416,7 @@ func ExitCrouch():
 		character.state_machine.SwitchStates(character.state_machine.CalculateState())
 
 func PowerLandStart():
+	print ("Power Land Started")
 	character.velocity = Vector2(0,0)
 	power_land_active = true
 	character.animation_controller.Landed()
@@ -469,21 +472,24 @@ func ToggleCrouchHitbox(is_crouching : bool):
 		player_hitbox.shape.height = (default_rect_size*0.4)
 		player_hitbox.position.y = 13 #ground_raycast.get_collision_point().y - character.position.y - ((default_rect_size*0.4)/ 2)#13
 		roof_raycast_right.position.y = 7
-		roof_raycast_right.target_position.y = -21
+		roof_raycast_right.target_position.y = -32
 		roof_raycast_left.position.y = 7
-		roof_raycast_left.target_position.y = -21
+		roof_raycast_left.target_position.y = -32
 		character.apply_floor_snap()
 	else:
 		player_hitbox.shape.height = default_rect_size
 		player_hitbox.position.y = 0
 		roof_raycast_right.position.y = -21
-		roof_raycast_right.target_position.y = -10
+		roof_raycast_right.target_position.y = -12
 		roof_raycast_left.position.y = -21
-		roof_raycast_left.target_position.y = -10
+		roof_raycast_left.target_position.y = -12
 		character.apply_floor_snap()
 
 func CalculateGroundForwardNormal():
-	ground_normal = ground_raycast.get_collision_normal()
+	if ground_raycast.is_colliding():
+		ground_normal = ground_raycast.get_collision_normal()
+	else:
+		ground_normal = Vector2(0,0)
 	if movement_direction_x < 0:
 		ground_forward_normal = Vector2(ground_normal.y, -ground_normal.x)
 	elif movement_direction_x > 0:

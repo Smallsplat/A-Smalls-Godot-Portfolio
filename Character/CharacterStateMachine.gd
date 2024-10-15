@@ -61,7 +61,7 @@ func CalculateState():
 	if character.IsOnFloor():
 		if Input.is_action_pressed("crouch"):
 			return "crouching"
-		elif (current_state == "crouching" or current_state == "landing") && character.movement_controller. RoofColliding():
+		elif (current_state == "crouching" or current_state == "landing") && character.movement_controller.RoofColliding():
 			return "crouching"
 		else:
 			return "grounded"

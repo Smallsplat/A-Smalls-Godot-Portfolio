@@ -11,6 +11,7 @@ extends CharacterBody2D
 @onready var playback = animation_tree["parameters/playback"]
 const camera = preload("res://Character/player_camera.tscn")
 var player_camera
+var previous_velocity : Vector2 = Vector2(0, 0)
 
 @export var camera_movement_speed : float = 15000
 @export var camera_minimum_speed : float = 0.25
@@ -38,16 +39,19 @@ func _physics_process(delta):
 	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
 		movement_controller.Jump(direction)
-	
+	# Handle Crouch
 	if Input.is_action_just_pressed("crouch"):
 		movement_controller.EnterCrouch()
+		
 	if Input.is_action_just_released("crouch"):
 		movement_controller.ExitCrouch()
 	if not Input.is_action_pressed("crouch") && state_machine.current_state == "crouching":
 		movement_controller.ExitCrouch()
-		
+	
+	# Move the player base don controlelr input direction
 	movement_controller.Move(direction)
 	
+	# Request Movement_Controller Physics
 	movement_controller.MovementPhysicsProcess(delta)
 	
 	if is_on_floor():
@@ -59,7 +63,10 @@ func _physics_process(delta):
 		self.rotation = move_toward(self.rotation, 0, 0.15)
 		movement_controller.ground_raycast.rotation = move_toward(movement_controller.ground_raycast.rotation, 0, 0.15)
 	
-
+	if movement_controller.movement_direction_x == 1:
+		floor_raycast.position.x = 3
+	else:
+		floor_raycast.position.x = -3
 	move_and_slide()
 
 func _process(_delta):
@@ -70,9 +77,17 @@ func IsOnFloor():
 	
 func move_camera():
 	if player_camera:
+		
 		var player_velocity = get_real_velocity()
+		
+		if abs(player_velocity.y) - abs(previous_velocity.y) > 0.01:
+			if player_velocity.y > 0:
+				player_velocity.y = previous_velocity.y + 0.01
+			else:
+				player_velocity.y = previous_velocity.y - 0.01
+			
 		# Add Player Velocity Offset
-		var look_forward : Vector2 = Vector2((player_velocity.normalized().x * abs(player_velocity.x)), (player_velocity.normalized().y* abs(velocity.y)))
+		var look_forward : Vector2 = Vector2((player_velocity.normalized().x * abs(player_velocity.x)), (player_velocity.normalized().y* abs(velocity.y) / 4))
 		# Clamp Player Velocity to keep character on screen
 		look_forward.x = clamp(look_forward.x,((get_viewport_rect().size.x * -camera_bounds.x)), get_viewport_rect().size.x * camera_bounds.y)
 		look_forward.y = clamp(look_forward.y,((get_viewport_rect().size.y * -camera_bounds.y)), get_viewport_rect().size.y * camera_bounds.y)
@@ -82,7 +97,7 @@ func move_camera():
 		look_forward.y -= movement_controller.player_hitbox.shape.height
 		
 		#Adjust camera speed based on distance from characeter - further = faster
-		var camera_speed: Vector2 = Vector2(abs(player_camera.position.x - look_forward.x),abs(player_camera.position.y - look_forward.y))
+		var camera_speed: Vector2 = Vector2(abs(player_camera.position.x - look_forward.x),abs(player_camera.position.y + look_forward.y))
 		#Adjust camera speed based on player velocity, - faster = faster
 		camera_speed = Vector2((camera_speed.x / (camera_movement_speed / abs(player_velocity.x))), (camera_speed.y / (camera_movement_speed / abs(player_velocity.y))))
 		# Adjust Camera speed if too slow
@@ -94,3 +109,5 @@ func move_camera():
 		#Finally move the damn camera
 		player_camera.position.x = move_toward(player_camera.position.x, look_forward.x, camera_speed.x)
 		player_camera.position.y = move_toward(player_camera.position.y, look_forward.y, camera_speed.y)
+		
+		previous_velocity = get_real_velocity()

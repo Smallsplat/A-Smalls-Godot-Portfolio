@@ -1150,8 +1150,7 @@ script = ExtResource("21_bk107")
 character = NodePath("..")
 
 [node name="FloorRayCast" type="RayCast2D" parent="."]
-visible = false
-target_position = Vector2(0, 23)
+target_position = Vector2(0, 24)
 
 [node name="GroundRayCast" type="RayCast2D" parent="."]
 visible = false
@@ -1162,23 +1161,24 @@ visible = false
 target_position = Vector2(0, 24)
 
 [node name="RoofRaycastRight" type="RayCast2D" parent="."]
-visible = false
 position = Vector2(7, -21)
 target_position = Vector2(0, -10)
 
 [node name="RoofRaycastLeft" type="RayCast2D" parent="."]
-visible = false
 position = Vector2(-7, -21)
 target_position = Vector2(0, -10)
 
 [node name="WallRayCastHead" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(0, -20)
 target_position = Vector2(10, 0)
 
 [node name="WallRayCastChest" type="RayCast2D" parent="."]
+visible = false
 target_position = Vector2(10, 0)
 
 [node name="WallRayCastLegs" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(0, 10)
 target_position = Vector2(10, 0)
 
