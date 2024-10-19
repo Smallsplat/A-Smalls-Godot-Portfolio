@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dx7las7iygrh6"]
+
+[ext_resource type="Script" path="res://Scripts/Character/Weapon/WeaponController.gd" id="1_po2gl"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_oh6r7"]
+
+[node name="CharacterWeapon" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("CanvasTexture_oh6r7")
+
+[node name="WeaponController" type="Node" parent="."]
+script = ExtResource("1_po2gl")
