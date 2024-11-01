@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+class_name PlayerCharacter
+
 @onready var player_sprite : Sprite2D = $PlayerSprite
 @onready var player_collider : CollisionShape2D = $PlayerCollidor
 @onready var state_machine : CharacterStateMachine = $CharacterStateMachine
@@ -9,19 +11,24 @@ extends CharacterBody2D
 @onready var ui_controller : UIController = $UIController
 @onready var floor_raycast : RayCast2D = $FloorRayCast
 @onready var playback = animation_tree["parameters/playback"]
+
 const camera = preload("res://Scripts/Character/player_camera.tscn")
 const weapon = preload("res://Scripts/Character/Weapon/CharacterWeapon.tscn")
-var player_camera
-var player_weapon
+var player_camera : Node2D
+var player_weapon : Node2D
 var weapon_controller : WeaponController
 var previous_velocity : Vector2 = Vector2(0, 0)
 
 @export var camera_movement_speed : float = 15000
 @export var camera_minimum_speed : float = 0.1
 @export var camera_bounds : Vector2 = Vector2(0.35, 0.40)
+@export var health : HealthResource
 
 var direction : Vector2 = Vector2.ZERO
+var controllerAimDirection : Vector2 = Vector2.ZERO
 var camera_position : RemoteTransform2D
+
+var player_spawner : Node2D # Tempomary Respawn storage, placeholder for offical death management
 
 var inverted : bool = false
 
@@ -32,30 +39,44 @@ func _ready():
 		instantiate_camera()
 	else:
 		player_camera = cameras[0]
+		
 	player_camera.position = self.position
 	ui_controller.player_camera = player_camera
-	ui_controller.OnSpawned()
 	
 	#Spawn Weapon
-	var instanced_weapon = weapon.instantiate()
-	get_tree().get_root().add_child.call_deferred(instanced_weapon)
-	player_weapon = instanced_weapon
+	var weapons = get_tree().get_nodes_in_group("Weapon")
+	if weapons.size() == 0:
+		instantiate_weapon()
+	else:
+		player_weapon = weapons[0]
+	
 	weapon_controller = player_weapon.find_child("WeaponController")
 	weapon_controller.character = self
+	
 	weapon_controller.OnSpawned()
+	ui_controller.OnSpawned()
 	
 	state_machine.SwitchStates(state_machine.CalculateState())
+	
+	health.health = 5
+	print (health.health)
+	health.death.connect(Death)
 
 func instantiate_camera():
 	var instanced_camera = camera.instantiate()
 	get_tree().get_root().add_child.call_deferred(instanced_camera)
 	player_camera = instanced_camera
-	
+
+func instantiate_weapon():
+	var instanced_weapon = weapon.instantiate()
+	get_tree().get_root().add_child.call_deferred(instanced_weapon)
+	player_weapon = instanced_weapon
 	
 func _physics_process(delta):
 	animation_controller.AnimationPhysicsProcess()
 
 	direction = Input.get_vector("left", "right", "up", "down") # Get the input direction
+	controllerAimDirection = Input.get_vector("controllerAimLeft", "controllerAimRight", "controllerAimUp", "controllerAimDown")
 	
 	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
@@ -69,8 +90,17 @@ func _physics_process(delta):
 	if not Input.is_action_pressed("crouch") && state_machine.current_state == "crouching":
 		movement_controller.ExitCrouch()
 	
-	if Input.is_action_just_pressed("fire"):
-		weapon_controller.FireWeapon()
+	if Input.is_action_pressed("fire"):
+		if not ui_controller.mouse_lockout:
+			weapon_controller.FireWeapon()
+		
+	if Input.is_action_just_pressed("ToggleUI"):
+		ui_controller.ToggleWeaponModulation()
+	
+	if Input.is_action_just_pressed("Debug key"):
+		print (health.health)
+		
+	
 	get_global_mouse_position()
 	# Move the player base don controlelr input direction
 	movement_controller.Move(direction)
@@ -124,7 +154,7 @@ func move_camera():
 		look_forward.y -= movement_controller.player_hitbox.shape.height
 		
 		#Adjust camera speed based on distance from characeter - further = faster
-		var camera_speed: Vector2 = Vector2(abs(player_camera.position.x - look_forward.x),abs(player_camera.position.y + look_forward.y))
+		var camera_speed : Vector2 = Vector2(abs(player_camera.position.x - look_forward.x),abs(player_camera.position.y + look_forward.y))
 		#Adjust camera speed based on player velocity, - faster = faster
 		camera_speed = Vector2((camera_speed.x / (camera_movement_speed / abs(player_velocity.x))), (camera_speed.y / (camera_movement_speed / abs(player_velocity.y))))
 
@@ -141,3 +171,9 @@ func move_camera():
 		previous_velocity = get_real_velocity()
 	#else:
 		#player_camera.position = self.position
+
+func Death():
+	self.position = player_spawner.position
+	player_camera.position = self.position
+	health.health = 5
+	print ("Player has Died!")

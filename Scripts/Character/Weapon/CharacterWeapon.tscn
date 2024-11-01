@@ -1,13 +1,124 @@
-[gd_scene load_steps=3 format=3 uid="uid://dx7las7iygrh6"]
+[gd_scene load_steps=8 format=3 uid="uid://dx7las7iygrh6"]
 
+[ext_resource type="Texture2D" uid="uid://cht560ctwy07g" path="res://Sprites/UIElements/Reload-Sheet.png" id="1_iuk1q"]
 [ext_resource type="Script" path="res://Scripts/Character/Weapon/WeaponController.gd" id="1_po2gl"]
+[ext_resource type="Texture2D" uid="uid://mxeeyfr2jfgn" path="res://Sprites/UIElements/Fire_Ready-Sheet.png" id="3_qaqsx"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_oh6r7"]
+[sub_resource type="Animation" id="Animation_ytsl3"]
+resource_name = "Loading"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponVisualisor:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_iuk1q")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponVisualisor:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
 
-[node name="CharacterWeapon" type="Node2D"]
+[sub_resource type="Animation" id="Animation_evckv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponVisualisor:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponVisualisor:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_iuk1q")]
+}
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("CanvasTexture_oh6r7")
+[sub_resource type="Animation" id="Animation_57qd7"]
+resource_name = "Ready"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponVisualisor:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponVisualisor:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_qaqsx")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3ud58"]
+_data = {
+"Loading": SubResource("Animation_ytsl3"),
+"RESET": SubResource("Animation_evckv"),
+"Ready": SubResource("Animation_57qd7")
+}
+
+[node name="CharacterWeapon" type="Node2D" groups=["Weapon"]]
+
+[node name="WeaponVisualisor" type="Sprite2D" parent="."]
+texture = ExtResource("1_iuk1q")
+hframes = 5
 
 [node name="WeaponController" type="Node" parent="."]
 script = ExtResource("1_po2gl")
+
+[node name="ReloadTimer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="ReloadTimeOut" type="Timer" parent="."]
+one_shot = true
+
+[node name="FireRate" type="Timer" parent="."]
+one_shot = true
+
+[node name="WeaponAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3ud58")
+}
+
+[connection signal="timeout" from="ReloadTimer" to="WeaponController" method="ReloadTimerEnd"]
+[connection signal="timeout" from="ReloadTimeOut" to="WeaponController" method="ReloadTimeOutEnd"]

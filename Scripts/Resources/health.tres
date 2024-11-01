@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HealthResource" load_steps=2 format=3 uid="uid://dax8oufmctado"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/HealthResource.gd" id="1_lgpet"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_lgpet")
+health = 0.0
+max_health = 0.0

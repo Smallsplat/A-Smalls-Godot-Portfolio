@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://yqku0ccdyh6c"]
+
+[ext_resource type="Script" path="res://Scripts/Level Mechanics/ThreatSplineSpawner.gd" id="1_0cytf"]
+
+[sub_resource type="Curve2D" id="Curve2D_rvtiv"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1, 16, 0, 0, 0, 0, 415, 17)
+}
+point_count = 2
+
+[node name="ThreatSplineSpawner" type="Path2D"]
+curve = SubResource("Curve2D_rvtiv")
+script = ExtResource("1_0cytf")
+threat_path = "res://Scripts/Level Mechanics/StaticThreats/AreaAttack.tscn"
+threat_distance = 100.0

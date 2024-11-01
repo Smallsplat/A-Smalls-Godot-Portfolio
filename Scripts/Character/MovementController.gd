@@ -284,10 +284,8 @@ func SlideOnEnter():
 			else:
 				slide_velocity.y += jump_velocity
 		character.velocity = ground_forward_normal * slide_velocity.length()
-		print ("Slide Velocity ", slide_velocity.length())
 	else:
 		character.velocity = ground_forward_normal * character_velocty_last_frame.length()
-		print ("Slide Last Frame, : ", character_velocty_last_frame.length())
 	sliding = true
 	character.apply_floor_snap()
 	
@@ -411,7 +409,6 @@ func ExitCrouch():
 		character.state_machine.SwitchStates(character.state_machine.CalculateState())
 
 func PowerLandStart():
-	print ("Power Land Started")
 	character.velocity = Vector2(0,0)
 	power_land_active = true
 	character.animation_controller.Landed()
@@ -429,10 +426,8 @@ func PowerLandLaunch():
 	var launch_speed = ((power_land_veocity.y) / powerlanding_divisor) * launch_direction 
 	if abs(launch_speed) < abs(min_powerlanding_launch_speed):
 		character.velocity.x = min_powerlanding_launch_speed * launch_direction 
-		print ("powerland launch at " , min_powerlanding_launch_speed)
 	else:
 		character.velocity.x = ((power_land_veocity.y) / powerlanding_divisor) * launch_direction 
-		print ("powerland launch at " , ((power_land_veocity.y) / powerlanding_divisor))
 	state_machine.SwitchStates(GetFutureState())
 	
 	power_land_active = false
@@ -502,6 +497,19 @@ func RoofColliding():
 		return true
 	return false
 
-func LaunchPlayer(direction : Vector2, power : float):
-	print (direction * power)
-	character.velocity += direction * power
+func AddLaunchPlayer(direction : Vector2, power : float):
+	var uncapped_launch_speed = Vector2(character.velocity + (direction * power))
+	print ("Uncapped Launch Speed : ", uncapped_launch_speed)
+	var launch_limiter = abs(Vector2(Vector2(500,500) / uncapped_launch_speed ))
+	if launch_limiter.x > 1: launch_limiter.x = 1
+	if launch_limiter.y > 1: launch_limiter.y = 1
+	print ("Launch Limiter : ", launch_limiter)
+	
+	character.velocity += (direction * power) * launch_limiter
+	print ("Launch at : ", (((direction * power)* launch_limiter)))
+	
+func FixedLaunchPlayer(direction : Vector2, power : float):
+	var launch_direction = direction * power
+	if abs(launch_direction.x) < abs(character.velocity.x): launch_direction.x = character.velocity.x + (direction.x * (power/5))
+	if launch_direction.y > character.velocity.y: launch_direction.y = character.velocity.y + (direction.y * (power/5))
+	character.velocity = (launch_direction)

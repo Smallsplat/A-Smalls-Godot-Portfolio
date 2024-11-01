@@ -1,7 +1,8 @@
-[gd_scene load_steps=98 format=3 uid="uid://cjorsjhnwhodd"]
+[gd_scene load_steps=99 format=3 uid="uid://cjorsjhnwhodd"]
 
 [ext_resource type="Script" path="res://Scripts/Character/player.gd" id="1_ii5ia"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterStateMachine.gd" id="1_m8b41"]
+[ext_resource type="Resource" uid="uid://dax8oufmctado" path="res://Scripts/Resources/health.tres" id="2_7e7c2"]
 [ext_resource type="Texture2D" uid="uid://bfkgyakjnvi2h" path="res://Sprites/Temp/Temp Slide Entry-Sheet.png" id="2_bfbpf"]
 [ext_resource type="Texture2D" uid="uid://45hjt4wf5oc1" path="res://Sprites/Temp/Temp Air Turn-Sheet.png" id="2_j1tjh"]
 [ext_resource type="Texture2D" uid="uid://m6hdpetyfiqj" path="res://Sprites/Temp/Temp Ground Turn Around-Sheet.png" id="2_lxfd8"]
@@ -1088,15 +1089,15 @@ states/WallClimb/position = Vector2(175, -127)
 transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_aqf70"), "Move", "Falling", SubResource("AnimationNodeStateMachineTransition_yc1rk"), "Falling", "Landing", SubResource("AnimationNodeStateMachineTransition_ud4cc"), "Landing", "Move", SubResource("AnimationNodeStateMachineTransition_xj70f"), "Move", "WallClimb", SubResource("AnimationNodeStateMachineTransition_607s3"), "WallClimb", "Falling", SubResource("AnimationNodeStateMachineTransition_otein"), "Slide", "Falling", SubResource("AnimationNodeStateMachineTransition_rlyca"), "Slide", "WallClimb", SubResource("AnimationNodeStateMachineTransition_7awes"), "Landing", "Landing Exit", SubResource("AnimationNodeStateMachineTransition_kk5ht"), "Landing Exit", "Move", SubResource("AnimationNodeStateMachineTransition_st80q"), "Slide Pre Entry", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_1itmf"), "Slide Entry", "Slide", SubResource("AnimationNodeStateMachineTransition_mx4kx"), "Landing", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_58e5j"), "Landing Exit", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_otm48"), "Move", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_lkhqq"), "Move", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_ragh2"), "Falling", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_sjgel"), "Landing", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_ns4cw"), "Slide Entry", "Landing", SubResource("AnimationNodeStateMachineTransition_r51jn"), "Slide", "Slide Exit", SubResource("AnimationNodeStateMachineTransition_pesv0"), "Slide Exit", "Move", SubResource("AnimationNodeStateMachineTransition_crhqg"), "Move", "Jump", SubResource("AnimationNodeStateMachineTransition_tuiu2"), "WallClimb", "Jump", SubResource("AnimationNodeStateMachineTransition_hew82"), "Slide", "Jump", SubResource("AnimationNodeStateMachineTransition_r8qkl"), "Jump", "Falling", SubResource("AnimationNodeStateMachineTransition_afbmf"), "Jump", "Landing", SubResource("AnimationNodeStateMachineTransition_lkcdh"), "Slide Entry", "Jump", SubResource("AnimationNodeStateMachineTransition_1t6vo"), "Slide Exit", "Jump", SubResource("AnimationNodeStateMachineTransition_y8xwm"), "Landing Exit", "Jump", SubResource("AnimationNodeStateMachineTransition_usd7r"), "Landing", "Jump", SubResource("AnimationNodeStateMachineTransition_dski3"), "Move", "Move Turnaround", SubResource("AnimationNodeStateMachineTransition_884eu"), "Move Turnaround", "Move", SubResource("AnimationNodeStateMachineTransition_kxyb0"), "Falling", "Airal Turnaround", SubResource("AnimationNodeStateMachineTransition_0lr3f"), "Airal Turnaround", "Falling", SubResource("AnimationNodeStateMachineTransition_ckwgb"), "Airal Turnaround", "Landing", SubResource("AnimationNodeStateMachineTransition_xa4n4"), "WallClimb", "Landing", SubResource("AnimationNodeStateMachineTransition_7og28")]
 graph_offset = Vector2(-205, -21.766)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
 floor_constant_speed = true
 floor_max_angle = 0.872665
 floor_snap_length = 20.0
 script = ExtResource("1_ii5ia")
+health = ExtResource("2_7e7c2")
 
 [node name="PlayerSprite" type="Sprite2D" parent="."]
-texture = ExtResource("6_q061o")
-offset = Vector2(2, 1)
+texture = ExtResource("2_j1tjh")
 hframes = 2
 
 [node name="PlayerCollidor" type="CollisionShape2D" parent="."]

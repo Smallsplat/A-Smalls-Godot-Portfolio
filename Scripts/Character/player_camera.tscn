@@ -9,7 +9,7 @@ position_smoothing_enabled = true
 
 [node name="HUD" type="CanvasLayer" parent="Camera2D"]
 
-[node name="Panel" type="Panel" parent="Camera2D/HUD"]
+[node name="Speed Tracker" type="Panel" parent="Camera2D/HUD"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -20,8 +20,337 @@ offset_top = -40.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="Speedometer" type="RichTextLabel" parent="Camera2D/HUD/Panel"]
+[node name="Speedometer" type="RichTextLabel" parent="Camera2D/HUD/Speed Tracker"]
 layout_mode = 0
 offset_right = 90.0
 offset_bottom = 40.0
 text = "Speed:"
+
+[node name="Ammo Tracker" type="Panel" parent="Camera2D/HUD"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -98.0
+offset_bottom = -41.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Ammometer" type="RichTextLabel" parent="Camera2D/HUD/Ammo Tracker"]
+layout_mode = 0
+offset_right = 90.0
+offset_bottom = 25.0
+text = "Ammo:"
+
+[node name="Reload Timeout Bar" type="ProgressBar" parent="Camera2D/HUD/Ammo Tracker"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 24.0
+offset_right = 88.0
+offset_bottom = 36.0
+show_percentage = false
+
+[node name="Reload Bar" type="ProgressBar" parent="Camera2D/HUD/Ammo Tracker"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 40.0
+offset_right = 88.0
+offset_bottom = 52.0
+max_value = 5.0
+show_percentage = false
+
+[node name="Weapon Modulation Panel" type="Panel" parent="Camera2D/HUD"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -124.0
+offset_right = 181.0
+offset_bottom = 131.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="RichTextLabel" parent="Camera2D/HUD/Weapon Modulation Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -204.0
+offset_right = 204.0
+offset_bottom = 40.0
+grow_horizontal = 2
+text = "								Weapon Modulation"
+
+[node name="Power Group" type="Panel" parent="Camera2D/HUD/Weapon Modulation Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -171.5
+offset_top = -91.5
+offset_right = -101.5
+offset_bottom = 91.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_right = NodePath("../Fire Group")
+focus_mode = 2
+
+[node name="Title_ Power" type="RichTextLabel" parent="Camera2D/HUD/Weapon Modulation Panel/Power Group"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -35.0
+offset_right = 35.0
+offset_bottom = 25.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Power[/center]"
+
+[node name="PowerSlider" type="VSlider" parent="Camera2D/HUD/Weapon Modulation Panel/Power Group"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -57.5
+offset_right = 8.0
+offset_bottom = 57.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_right = NodePath("../../Fire Group/FireRateSlider")
+min_value = 1.0
+step = 0.25
+value = 1.0
+
+[node name="Value_Power" type="LineEdit" parent="Camera2D/HUD/Weapon Modulation Panel/Power Group"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -33.5313
+offset_top = -31.0
+offset_right = 33.5313
+grow_horizontal = 2
+grow_vertical = 0
+text = "0"
+placeholder_text = "0"
+alignment = 1
+max_length = 4
+
+[node name="Fire Group" type="Panel" parent="Camera2D/HUD/Weapon Modulation Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -82.5
+offset_top = -91.5
+offset_right = -12.5
+offset_bottom = 91.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_left = NodePath("../Power Group")
+focus_neighbor_right = NodePath("../Reload Group")
+focus_mode = 2
+
+[node name="Title_ Fire rate" type="RichTextLabel" parent="Camera2D/HUD/Weapon Modulation Panel/Fire Group"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_right = 42.0
+offset_bottom = 25.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Fire Rate[/center]"
+
+[node name="FireRateSlider" type="VSlider" parent="Camera2D/HUD/Weapon Modulation Panel/Fire Group"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -57.5
+offset_right = 8.0
+offset_bottom = 57.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_left = NodePath("../../Power Group/PowerSlider")
+focus_neighbor_right = NodePath("../../Reload Group/ReloadSlider")
+min_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="Value_Fire rate" type="LineEdit" parent="Camera2D/HUD/Weapon Modulation Panel/Fire Group"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -33.5313
+offset_top = -31.0
+offset_right = 33.5313
+grow_horizontal = 2
+grow_vertical = 0
+text = "0"
+placeholder_text = "0"
+alignment = 1
+
+[node name="Reload Group" type="Panel" parent="Camera2D/HUD/Weapon Modulation Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 13.5
+offset_top = -91.5
+offset_right = 83.5
+offset_bottom = 91.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_left = NodePath("../Fire Group")
+focus_neighbor_right = NodePath("../Ammo Group")
+focus_mode = 2
+
+[node name="Title_ Reload" type="RichTextLabel" parent="Camera2D/HUD/Weapon Modulation Panel/Reload Group"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -34.0
+offset_right = 37.0
+offset_bottom = 25.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Reload"
+
+[node name="ReloadSlider" type="VSlider" parent="Camera2D/HUD/Weapon Modulation Panel/Reload Group"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -57.5
+offset_right = 8.0
+offset_bottom = 57.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_left = NodePath("../../Fire Group/FireRateSlider")
+focus_neighbor_right = NodePath("../../Ammo Group/AmmoSlider")
+min_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="Value_Reload" type="LineEdit" parent="Camera2D/HUD/Weapon Modulation Panel/Reload Group"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -33.5313
+offset_top = -31.0
+offset_right = 33.5313
+grow_horizontal = 2
+grow_vertical = 0
+text = "0"
+placeholder_text = "0"
+alignment = 1
+
+[node name="Ammo Group" type="Panel" parent="Camera2D/HUD/Weapon Modulation Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 106.5
+offset_top = -91.5
+offset_right = 176.5
+offset_bottom = 91.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_left = NodePath("../Reload Group")
+focus_mode = 2
+
+[node name="Title_ Ammo" type="RichTextLabel" parent="Camera2D/HUD/Weapon Modulation Panel/Ammo Group"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -34.0
+offset_right = 36.0
+offset_bottom = 25.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Ammo"
+
+[node name="AmmoSlider" type="VSlider" parent="Camera2D/HUD/Weapon Modulation Panel/Ammo Group"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -57.5
+offset_right = 8.0
+offset_bottom = 57.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_left = NodePath("../../Reload Group/ReloadSlider")
+min_value = 1.0
+value = 1.0
+exp_edit = true
+
+[node name="Value_ Ammo" type="LineEdit" parent="Camera2D/HUD/Weapon Modulation Panel/Ammo Group"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -33.5313
+offset_top = -31.0
+offset_right = 33.5313
+grow_horizontal = 2
+grow_vertical = 0
+text = "0"
+placeholder_text = "0"
+alignment = 1
+
+[node name="WeaponEnergyBar" type="ProgressBar" parent="Camera2D/HUD/Weapon Modulation Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -172.0
+offset_top = -32.0
+offset_right = 175.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 1000.0
+show_percentage = false
