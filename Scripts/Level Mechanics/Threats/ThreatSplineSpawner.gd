@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var path : Path2D = $"."
-@export var threat_path : String
+@export var threat_list : StaticThreatsList
 @export var threat_distance : float = 100
 @export var random_offset : Vector2 = Vector2(-1,1)  
 
@@ -47,7 +47,7 @@ func SpawnThreats():
 	var x = 0
 	for points in path.curve.get_point_count():
 		var spawn_location = path.curve.get_point_position(x)
-		var threat = load(threat_path).instantiate()
+		var threat = threat_list.GetThreat().instantiate()
 		threat.position = spawn_location
 		self.add_child(threat)
 		x += 1

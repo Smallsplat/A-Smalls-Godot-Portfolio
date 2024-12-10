@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="DamageResource" load_steps=2 format=3 uid="uid://c05r18iryufgc"]
 
-[ext_resource type="Script" path="res://Scripts/Level Mechanics/Threats/Damaging Effects/DamageHealth.gd" id="1_o21yo"]
+[ext_resource type="Script" path="res://Scripts/Level Mechanics/Threats/Resources/DamageHealth.gd" id="1_o21yo"]
 
 [resource]
 resource_local_to_scene = true

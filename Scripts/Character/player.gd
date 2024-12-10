@@ -109,18 +109,18 @@ func _physics_process(delta):
 	movement_controller.MovementPhysicsProcess(delta)
 	
 	if is_on_floor():
-		var ground_normal = movement_controller.ground_raycast.get_collision_normal()
+		var ground_normal = floor_raycast.get_collision_normal()
 		var ground_forward_normal = Vector2(-ground_normal.y, ground_normal.x)
-		self.rotation = move_toward(self.rotation, ground_forward_normal.angle(), 0.15)
-		movement_controller.ground_raycast.rotation = move_toward(movement_controller.ground_raycast.rotation, -ground_forward_normal.angle(), 0.15)
+		player_sprite.rotation = move_toward(player_sprite.rotation, ground_forward_normal.angle(), 0.15)
+		#movement_controller.ground_raycast.rotation = move_toward(movement_controller.ground_raycast.rotation, -ground_forward_normal.angle(), 0.15)
 	else:
-		self.rotation = move_toward(self.rotation, 0, 0.15)
-		movement_controller.ground_raycast.rotation = move_toward(movement_controller.ground_raycast.rotation, 0, 0.15)
+		player_sprite.rotation = move_toward(player_sprite.rotation, 0, 0.15)
+		#movement_controller.ground_raycast.rotation = move_toward(movement_controller.ground_raycast.rotation, 0, 0.15)
 	
-	if movement_controller.movement_direction_x == 1:
-		floor_raycast.position.x = 3
-	else:
-		floor_raycast.position.x = -3
+	#if movement_controller.movement_direction_x == 1:
+	#	floor_raycast.position.x = 3
+	#else:
+	#	floor_raycast.position.x = -3
 	move_and_slide()
 
 func _process(_delta):

@@ -1,16 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkf4nxx57igp4"]
+[gd_scene load_steps=6 format=3 uid="uid://bkf4nxx57igp4"]
 
 [ext_resource type="Script" path="res://Scripts/Level Mechanics/Threats/Mobile Threats/MissileLogic.gd" id="1_d5ud7"]
 [ext_resource type="Texture2D" uid="uid://bcjfy20fwy4fk" path="res://Sprites/Temp/Threats/Missile.png" id="2_2lkrn"]
+[ext_resource type="Resource" uid="uid://c05r18iryufgc" path="res://Scripts/Level Mechanics/Threats/Resources/DamageHealth.tres" id="2_t1ayi"]
+[ext_resource type="Texture2D" uid="uid://dt4cmul2bf14q" path="res://Sprites/UIElements/Warning Direction Indicator.png" id="3_ax0ub"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fqpy5"]
 size = Vector2(20, 8)
 
 [node name="Missile" type="Node2D"]
 script = ExtResource("1_d5ud7")
+damage_logic = ExtResource("2_t1ayi")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-rotation = 1.5708
+[node name="Sprite Missile" type="Sprite2D" parent="."]
 texture = ExtResource("2_2lkrn")
 
 [node name="Area2D" type="Area2D" parent="."]
@@ -18,6 +20,18 @@ collision_layer = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_fqpy5")
+
+[node name="Sprite Indicator Missile" type="Sprite2D" parent="."]
+texture = ExtResource("2_2lkrn")
+
+[node name="Sprite Indicator" type="Sprite2D" parent="."]
+scale = Vector2(-1, 1)
+texture = ExtResource("3_ax0ub")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Sprite Indicator"]
+remote_path = NodePath("../../Sprite Indicator Missile")
+update_rotation = false
+update_scale = false
 
 [connection signal="area_entered" from="Area2D" to="." method="Collision"]
 [connection signal="body_entered" from="Area2D" to="." method="Collision"]

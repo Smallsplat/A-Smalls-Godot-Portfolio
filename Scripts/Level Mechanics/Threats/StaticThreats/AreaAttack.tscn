@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bj5kkdu1ih7du"]
+[gd_scene load_steps=8 format=3 uid="uid://bj5kkdu1ih7du"]
 
 [ext_resource type="Script" path="res://Scripts/Level Mechanics/Threats/StaticThreats/AreaAttack.gd" id="1_va8th"]
+[ext_resource type="Resource" uid="uid://c05r18iryufgc" path="res://Scripts/Level Mechanics/Threats/Resources/DamageHealth.tres" id="2_8pkxm"]
 [ext_resource type="Texture2D" uid="uid://dkb6jfipr86li" path="res://Sprites/Temp/Threats/Temp AOE Threat Sheet.png" id="2_dindy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4rbj8"]
@@ -94,6 +95,7 @@ _data = {
 
 [node name="AreaAttack" type="Node2D"]
 script = ExtResource("1_va8th")
+damage_logic = ExtResource("2_8pkxm")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_dindy")

@@ -75,9 +75,15 @@ var overspeed_limiter : Vector2 = Vector2(0,0)
 var movement_direction_x : float = 0
 #Speedboost when landing on a slope
 var character_velocty_last_frame : Vector2 = Vector2(0,0)
-# Ground Normals for SLiding
+
+# Ground Normals for Powerlanding ONLY
 var ground_normal : Vector2 = Vector2(0,0)
 var ground_forward_normal : Vector2 = Vector2(0,0)
+
+#  Floor Normals for Everything related to touching the floor
+var floor_normal : Vector2 = Vector2(0,0)
+var floor_forward_normal : Vector2 = Vector2(0,0)
+
 # Roof Launch Memeory
 var roof_launch_blocker : bool = false
 var roof_launch_velocity : float = 0
@@ -107,9 +113,10 @@ func MovementPhysicsProcess(delta):
 	
 	# Coyote Jump Extender
 	CalculateGroundForwardNormal()
-	if (ground_raycast.get_collision_normal().x != 0):
+	CalculateFloorForwardNormal()
+	if (character.floor_raycast.get_collision_normal().x != 0):
 		# This calculation is scuffed. We could do better, but this works for now.
-		edge_detector.target_position.y = 26 + (24 * ((ground_raycast.get_collision_normal().y + 1)*2))
+		edge_detector.target_position.y = 26 + (24 * ((character.floor_raycast.get_collision_normal().y + 1)*2))
 	else: 
 		edge_detector.target_position.y = 24
 	edge_detector.target_position.x = coyote_jump_edge_finder_bonus * movement_direction_x
@@ -123,12 +130,12 @@ func MovementPhysicsProcess(delta):
 		ground_raycast.target_position.y = 32
 	else:
 		ground_raycast.target_position.y = 45
-	var floor_snap_var = 100 if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && (ground_raycast.get_collision_normal().x != 0) && character.IsOnFloor())else 10
+	var floor_snap_var = 100 if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && (character.floor_raycast.get_collision_normal().x != 0) && character.IsOnFloor())else 10
 	character.floor_snap_length = floor_snap_var
 	if ((CurrentState(["crouching"]) or (CurrentState(["landing"]) && GetFutureState() == "crouching")) && character.IsOnFloor()) && not jumping:
 		character.apply_floor_snap()
 		# Put the player Y velocity to the ground velocity because Floor snap doesnt actually snap palyer velocity to the floor because godot hates children and babys
-		character.velocity.y = character.velocity.y * ground_forward_normal.y
+		character.velocity.y = character.velocity.y * floor_forward_normal.y
 	
 	
 	# Roof Blocker Velocity Calculation
@@ -241,6 +248,9 @@ func Move(direction : Vector2): # INPUT FUNCTION - Inputs Character Inputs from 
 	#If we're grounded (Or about to be grounded while landing)
 	if CurrentState(["grounded"]) or (CurrentState(["landing"]) && (GetFutureState() == "grounded")):
 		Run(direction)
+		#Turn off Power Landing blocker if we're not holding crouch
+		if power_land_velo_blocker:
+			power_land_velo_blocker = false
 	
 	#If we're airal
 	if CurrentState(["airal"]):
@@ -250,9 +260,9 @@ func Move(direction : Vector2): # INPUT FUNCTION - Inputs Character Inputs from 
 	if CurrentState(["wallrunning"]):
 		WallRun()
 
-	#Drop through 1 way floors
+	#Drop through one way floors
 	if CurrentState(["grounded", "crouching", "landing"]):
-		if IsOneWayCollidor(ground_raycast) && direction.y > 0.8:
+		if IsOneWayCollidor(character.floor_raycast) && direction.y > 0.8:
 			character.position.y += 1
 
 func Run(direction : Vector2):
@@ -274,8 +284,8 @@ func Run(direction : Vector2):
 	
 func SlideOnEnter():
 	# Nerf slide boosts on uphills
-	if sign(ground_normal.x) != sign(slide_velocity.x) && (ground_normal.x != 0):
-		slide_velocity.x *= 1 - abs(ground_normal.x / 4)
+	if sign(floor_normal.x) != sign(slide_velocity.x) && (floor_normal.x != 0):
+		slide_velocity.x *= 1 - abs(floor_normal.x / 4)
 		
 	if CurrentState(["landing"]):
 		if not (sign(ground_normal.x) == sign(slide_velocity.x) and (ground_normal.x != 0)):
@@ -283,32 +293,33 @@ func SlideOnEnter():
 				slide_velocity.y = 0
 			else:
 				slide_velocity.y += jump_velocity
-		character.velocity = ground_forward_normal * slide_velocity.length()
+		character.velocity = floor_forward_normal * slide_velocity.length()
 	else:
-		character.velocity = ground_forward_normal * character_velocty_last_frame.length()
+		character.velocity = floor_forward_normal * character_velocty_last_frame.length()
 	sliding = true
 	character.apply_floor_snap()
 	
 func Slide():
 	# Work out if we should speed up Player direction based on ground slope
-	if ((ground_normal.x > 0 && character.velocity.x > 0) or (ground_normal.x < 0 && character.velocity.x < 0)):
-		character.velocity += ground_forward_normal*slide_acceleration
+	if ((floor_normal.x > 0 && character.velocity.x > 0) or (floor_normal.x < 0 && character.velocity.x < 0)):
+		character.velocity += floor_forward_normal*slide_acceleration
 	# Work out if we should be slowing the player
+	
 	#	Is slideing uphill
-	elif not ((ground_normal.x >= 0 && character.velocity.x > 0) or (ground_normal.x <= 0 && character.velocity.x < 0)):
-		character.velocity.x -= ground_forward_normal.x*slide_breaking
+	elif not ((floor_normal.x >= 0 && character.velocity.x > 0) or (floor_normal.x <= 0 && character.velocity.x < 0)):
+		character.velocity.x -= floor_forward_normal.x*slide_breaking
 	#	is trying to turn around
 	elif not ((character.direction.x >= 0 && character.velocity.x > 0) or (character.direction.x <= 0 && character.velocity.x < 0)):
-		character.velocity.x -= ground_forward_normal.x*slide_acceleration
+		character.velocity.x -= floor_forward_normal.x*slide_acceleration
 	#	is is flat
-	elif (ground_normal.x == 0) and (abs(character.velocity.x) > min_slide_speed):
-		character.velocity.x -= ground_forward_normal.x*slide_breaking
+	elif (floor_normal.x == 0) and (abs(character.velocity.x) > min_slide_speed):
+		character.velocity.x -= floor_forward_normal.x*slide_breaking
 	# If none of the above is true and we're below minimum speed, reach it.
 	elif (abs(character.velocity.x) < min_slide_speed) and (not power_land_active):
-		character.velocity += ground_forward_normal*slide_acceleration
+		character.velocity += floor_forward_normal*slide_acceleration
 	# Else, if none of the above is true, slow down
 	else:
-		character.velocity.x -= ground_forward_normal.x*slide_breaking
+		character.velocity.x -= floor_forward_normal.x*slide_breaking
 	character.apply_floor_snap()
 
 func AirControl(direction : Vector2):
@@ -376,7 +387,7 @@ func TryWallRun():
 func WallRunOnEnter(raycast : RayCast2D):
 	#Initalise Wall Climb by launching the player up and killing horisontal velocity
 	jumping = false
-	wall_direction = character.direction.x
+	wall_direction = -1 if character.direction.x < 0 else 1
 	if(character.velocity.y * -1 <= minimum_wallrun_speed):
 		character.velocity.y = abs(character_velocty_last_frame.x) * -1
 	
@@ -385,16 +396,17 @@ func WallRunOnEnter(raycast : RayCast2D):
 	character.rotation = 0
 		#Stop X velocity
 	character.velocity.x = 0
-		# Get wall Corodinates and set palyer upon them
+	
+	# Get wall Corodinates and set palyer upon them
 	var collidor = raycast.get_collider()
-	#If theres no collidors return false
+		#If theres no collidors return false
 	if not collidor == null:
 		var raycast_collsion_point = raycast.get_collision_point() + (Vector2(4,0) * character.direction.x)
-		var tilemap = raycast.get_collider()
 		#Get the cell
-		var cell = collidor.local_to_map(raycast_collsion_point)
+		var cell = collidor.local_to_map(collidor.to_local(raycast_collsion_point))
 		#Get the cells world cornidates
-		var tile_center_pos = tilemap.map_to_local(cell)
+		var tile_center_pos = collidor.to_global(collidor.map_to_local(cell))
+		print ("Collision point is ",raycast_collsion_point ," tile is therefor ", tile_center_pos, "And cell is ", cell)
 		#Add half cell Size + half Character Size * Opposite of character direction
 		character.position.x = (tile_center_pos.x + ((16 + 8) * -character.direction.x))
 	
@@ -441,10 +453,15 @@ func IsOneWayCollidor(raycast : RayCast2D):
 	#else get the collisoon point
 	var raycast_collsion_point = raycast.get_collision_point() + (Vector2(4,0) * character.direction.x) + Vector2(0,4)
 	#Get the cell
-	var cell = collidor.local_to_map(raycast_collsion_point)
+	var cell = collidor.local_to_map(collidor.to_local(raycast_collsion_point))
 	#Get the cell Data
 	var data = collidor.get_cell_tile_data(0,cell)
-	if data != null:
+
+	if collidor is TileMap:
+		if collidor.get_cell_tile_data(1,cell) != null:
+			data = collidor.get_cell_tile_data(1,cell)
+	
+	if data != null and data.is_collision_polygon_one_way(0,0) != null: 
 		if data.is_collision_polygon_one_way(0,0):
 			return true
 		else:
@@ -491,6 +508,17 @@ func CalculateGroundForwardNormal():
 		ground_forward_normal = Vector2(ground_normal.y, -ground_normal.x)
 	elif movement_direction_x > 0:
 		ground_forward_normal = Vector2(-ground_normal.y, ground_normal.x)
+
+func CalculateFloorForwardNormal():
+	if character.floor_raycast.is_colliding():
+		floor_normal = character.floor_raycast.get_collision_normal()
+	else:
+		floor_normal = Vector2(0,0)
+	if movement_direction_x < 0:
+		floor_forward_normal = Vector2(floor_normal.y, -floor_normal.x)
+	elif movement_direction_x > 0:
+		floor_forward_normal = Vector2(-floor_normal.y, floor_normal.x)
+
 
 func RoofColliding():
 	if roof_raycast_right.is_colliding() or roof_raycast_left.is_colliding():

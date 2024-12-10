@@ -1,12 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpltv1syabbjp"]
+[gd_scene load_steps=4 format=3 uid="uid://dpltv1syabbjp"]
 
 [ext_resource type="Script" path="res://Scripts/Level Mechanics/Threats/ThreatOffscreenSpawner.gd" id="1_6kgjh"]
+[ext_resource type="Resource" uid="uid://dnuh503rssnub" path="res://Scripts/Level Mechanics/Threats/Resources/MobileThreatsList.tres" id="2_0g1uj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t4y4j"]
 size = Vector2(65, 104)
 
 [node name="ThreatOffscreenSpawner" type="Node2D"]
 script = ExtResource("1_6kgjh")
+threat_list = ExtResource("2_0g1uj")
+spawn_amount = 0
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 4

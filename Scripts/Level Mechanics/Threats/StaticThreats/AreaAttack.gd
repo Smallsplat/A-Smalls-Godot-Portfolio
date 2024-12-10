@@ -6,6 +6,8 @@ extends Node2D
 var colliding = []
 @export var damage : float = 1
 
+@export var damage_logic : DamageResource
+
 const explosion = preload("res://Scripts/Level Mechanics/Threats/Damaging Effects/LargeExplosion.tscn")
 
 # Called when the node enters the scene tree for the first time.
@@ -31,9 +33,14 @@ func Detonate():
 	get_tree().get_root().add_child.call_deferred(instanced_exposion)
 	instanced_exposion.position = self.global_position
 	for object in colliding:
-		instanced_exposion.TryDamage(object, damage)
+		TryDamage(object, damage)
 	print ("Instanced Explosion at ", instanced_exposion.position)
 	queue_free()
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished(_anim_name):
 	Detonate()
+
+func TryDamage(object, amount):
+	if damage_logic:
+		damage_logic.damage = amount
+		damage_logic.Damage(object)

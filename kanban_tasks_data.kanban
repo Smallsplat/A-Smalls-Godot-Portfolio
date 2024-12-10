@@ -1,0 +1,199 @@
+{
+	"categories": [
+		{
+			"uuid": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"title": "Task",
+			"color": "70bafa"
+		},
+		{
+			"uuid": "794e9c91-2979-474c-bb05-c00b47b82a59",
+			"title": "Strech Goals",
+			"color": "632cf9"
+		},
+		{
+			"uuid": "765f0c3d-ba19-4ad3-9ac0-0fc191f1109c",
+			"title": "Future Upgrades",
+			"color": "d225d4"
+		}
+	],
+	"stages": [
+		{
+			"uuid": "afb4bc47-a067-4cd6-8f9f-6af6fb8bfeed",
+			"title": "Todo",
+			"tasks": [
+				"ec81f871-ac65-4871-b04f-5fc14ce16dc6",
+				"45012d1b-0959-450b-8609-2ae7ee60a743",
+				"02e3832c-0f0a-4e09-8567-9c48a5710ce5",
+				"35c60f57-5883-4bea-b639-91e932a1ccca",
+				"477f4fa5-fe0a-499e-acf7-950033f11b90",
+				"1529c4ec-9571-43e3-80c8-55751e83d7e2",
+				"f4ae03bf-4f36-472e-a357-45e3e050e013"
+			]
+		},
+		{
+			"uuid": "06935dcc-1e36-449d-98ad-88d24d41d52d",
+			"title": "Doing",
+			"tasks": [
+				"14d0c96f-13fb-486b-b1cf-54954d9d6106",
+				"c285da1d-abe5-471d-be98-8e3aebcbfc81"
+			]
+		},
+		{
+			"uuid": "5fd0179b-10b2-4a92-8bad-f352dec0f4a8",
+			"title": "Done",
+			"tasks": [
+				"d3aa8688-8d08-4565-b9cb-c1bd1b6a2da4",
+				"e14b7b77-cb87-4e91-8544-c340d7fcded7",
+				"5e3350d8-6744-4cfd-a1ee-c1b4d9d9cf5a",
+				"0a405c6a-71e4-47eb-9d6c-82c56d88e42b",
+				"2630b821-0316-4733-aeed-f8c2af82ffcd",
+				"65bbe68c-2a20-4409-a4be-e8a4037912ae"
+			]
+		}
+	],
+	"tasks": [
+		{
+			"uuid": "0a405c6a-71e4-47eb-9d6c-82c56d88e42b",
+			"title": "Level Generation",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "e14b7b77-cb87-4e91-8544-c340d7fcded7",
+			"title": "Underground Tileset",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "5e3350d8-6744-4cfd-a1ee-c1b4d9d9cf5a",
+			"title": "Industrial Tileset",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "1529c4ec-9571-43e3-80c8-55751e83d7e2",
+			"title": "More Attack Variants",
+			"description": "",
+			"category": "794e9c91-2979-474c-bb05-c00b47b82a59",
+			"steps": []
+		},
+		{
+			"uuid": "f4ae03bf-4f36-472e-a357-45e3e050e013",
+			"title": "Slow-mo Hacker mode",
+			"description": "",
+			"category": "765f0c3d-ba19-4ad3-9ac0-0fc191f1109c",
+			"steps": []
+		},
+		{
+			"uuid": "d3aa8688-8d08-4565-b9cb-c1bd1b6a2da4",
+			"title": "One ways on Dirt and Cliff tilesets",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "65bbe68c-2a20-4409-a4be-e8a4037912ae",
+			"title": "Fix Inside Cliff Tiles to be smooth rather than recoloured DIrty",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "14d0c96f-13fb-486b-b1cf-54954d9d6106",
+			"title": "Update general Texture Errors",
+			"description": "",
+			"category": "794e9c91-2979-474c-bb05-c00b47b82a59",
+			"steps": []
+		},
+		{
+			"uuid": "2630b821-0316-4733-aeed-f8c2af82ffcd",
+			"title": "Re-create existing levels with new sprites",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "ec81f871-ac65-4871-b04f-5fc14ce16dc6",
+			"title": "Fill current Levels with Threats",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "45012d1b-0959-450b-8609-2ae7ee60a743",
+			"title": "Visable healthbar for Player",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "c285da1d-abe5-471d-be98-8e3aebcbfc81",
+			"title": "Replace Character aniamtions with New ones",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": [
+				{
+					"details": "CA Ground Turn",
+					"done": true
+				},
+				{
+					"details": "CA Wall Jump",
+					"done": false
+				},
+				{
+					"details": "CA Power Land",
+					"done": false
+				},
+				{
+					"details": "CA Land",
+					"done": false
+				},
+				{
+					"details": "CA Slide",
+					"done": false
+				},
+				{
+					"details": "CA Slide Entry",
+					"done": false
+				}
+			]
+		},
+		{
+			"uuid": "02e3832c-0f0a-4e09-8567-9c48a5710ce5",
+			"title": "Add level start block",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "35c60f57-5883-4bea-b639-91e932a1ccca",
+			"title": "Add Level warning at far segemnt to tell demo players physics will start to break",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "477f4fa5-fe0a-499e-acf7-950033f11b90",
+			"title": "Impliment New character Animations",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		}
+	],
+	"layout": {
+		"columns": [
+			[
+				"afb4bc47-a067-4cd6-8f9f-6af6fb8bfeed"
+			],
+			[
+				"06935dcc-1e36-449d-98ad-88d24d41d52d"
+			],
+			[
+				"5fd0179b-10b2-4a92-8bad-f352dec0f4a8"
+			]
+		]
+	}
+}

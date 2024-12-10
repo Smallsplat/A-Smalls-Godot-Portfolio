@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Set1LevelList" load_steps=2 format=3 uid="uid://h5iebo7lnc0q"]
+
+[ext_resource type="Script" path="res://Scripts/Level Spawning/Set1Levels.gd" id="1_lvlly"]
+
+[resource]
+script = ExtResource("1_lvlly")
+level_choice = 0

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="MobileThreatsList" load_steps=2 format=3 uid="uid://dnuh503rssnub"]
+
+[ext_resource type="Script" path="res://Scripts/Level Mechanics/Threats/Resources/MobileThreatsList.gd" id="1_jgww2"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_jgww2")
+threat_choice = 0

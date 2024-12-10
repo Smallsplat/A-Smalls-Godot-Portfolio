@@ -76,7 +76,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(0, -22)]
 }
 
 [sub_resource type="Animation" id="Animation_4qxmb"]
@@ -128,7 +128,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(0, -22)]
 }
 
 [sub_resource type="Animation" id="Animation_82urs"]
@@ -181,7 +181,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(0, -22)]
 }
 
 [sub_resource type="Animation" id="Animation_4cf5u"]
@@ -233,7 +233,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(2, 0)]
+"values": [Vector2(2, -22)]
 }
 
 [sub_resource type="Animation" id="Animation_m3enc"]
@@ -285,7 +285,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(2, 1)]
+"values": [Vector2(2, -21)]
 }
 
 [sub_resource type="Animation" id="Animation_ic261"]
@@ -337,7 +337,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(2, 1)]
+"values": [Vector2(2, -21)]
 }
 
 [sub_resource type="Animation" id="Animation_cblbj"]
@@ -389,7 +389,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-1, 0)]
+"values": [Vector2(-1, -22)]
 }
 
 [sub_resource type="Animation" id="Animation_tw3so"]
@@ -441,7 +441,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Vector2(1, -21)]
 }
 
 [sub_resource type="Animation" id="Animation_vhfyc"]
@@ -457,6 +457,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerSprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, -10)]
 }
 
 [sub_resource type="Animation" id="Animation_ulgwr"]
@@ -508,7 +520,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(0, -22)]
 }
 
 [sub_resource type="Animation" id="Animation_0cfw1"]
@@ -561,7 +573,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 12)]
+"values": [Vector2(1, -10)]
 }
 
 [sub_resource type="Animation" id="Animation_lrr8e"]
@@ -613,7 +625,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 1.5)]
+"values": [Vector2(0, -20.5)]
 }
 
 [sub_resource type="Animation" id="Animation_rxfxq"]
@@ -665,7 +677,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 1.5)]
+"values": [Vector2(0, -20.5)]
 }
 
 [sub_resource type="Animation" id="Animation_0lan1"]
@@ -717,7 +729,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 1.5)]
+"values": [Vector2(0, -20.5)]
 }
 
 [sub_resource type="Animation" id="Animation_lm212"]
@@ -770,7 +782,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, -1)]
+"values": [Vector2(0, -23)]
 }
 
 [sub_resource type="Animation" id="Animation_tn4dn"]
@@ -822,7 +834,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 1.5), Vector2(1, 1.5), Vector2(2, 1.5)]
+"values": [Vector2(0, -20.5), Vector2(1, -20.5), Vector2(2, -20.5)]
 }
 
 [sub_resource type="Animation" id="Animation_nuk3q"]
@@ -875,7 +887,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, -1)]
+"values": [Vector2(0, -21)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pteo8"]
@@ -1066,7 +1078,7 @@ states/End/position = Vector2(1253, 100)
 states/Falling/node = SubResource("AnimationNodeAnimation_c3wi3")
 states/Falling/position = Vector2(758, -127)
 states/Jump/node = SubResource("AnimationNodeBlendSpace1D_0fbxn")
-states/Jump/position = Vector2(392, 100)
+states/Jump/position = Vector2(393, 100)
 states/Landing/node = SubResource("AnimationNodeBlendSpace1D_ahen4")
 states/Landing/position = Vector2(758, 290.234)
 "states/Landing Exit/node" = SubResource("AnimationNodeAnimation_l6sgg")
@@ -1087,7 +1099,7 @@ states/Start/position = Vector2(-39, 100)
 states/WallClimb/node = SubResource("AnimationNodeAnimation_ucnin")
 states/WallClimb/position = Vector2(175, -127)
 transitions = ["Start", "Move", SubResource("AnimationNodeStateMachineTransition_aqf70"), "Move", "Falling", SubResource("AnimationNodeStateMachineTransition_yc1rk"), "Falling", "Landing", SubResource("AnimationNodeStateMachineTransition_ud4cc"), "Landing", "Move", SubResource("AnimationNodeStateMachineTransition_xj70f"), "Move", "WallClimb", SubResource("AnimationNodeStateMachineTransition_607s3"), "WallClimb", "Falling", SubResource("AnimationNodeStateMachineTransition_otein"), "Slide", "Falling", SubResource("AnimationNodeStateMachineTransition_rlyca"), "Slide", "WallClimb", SubResource("AnimationNodeStateMachineTransition_7awes"), "Landing", "Landing Exit", SubResource("AnimationNodeStateMachineTransition_kk5ht"), "Landing Exit", "Move", SubResource("AnimationNodeStateMachineTransition_st80q"), "Slide Pre Entry", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_1itmf"), "Slide Entry", "Slide", SubResource("AnimationNodeStateMachineTransition_mx4kx"), "Landing", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_58e5j"), "Landing Exit", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_otm48"), "Move", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_lkhqq"), "Move", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_ragh2"), "Falling", "Slide Entry", SubResource("AnimationNodeStateMachineTransition_sjgel"), "Landing", "Slide Pre Entry", SubResource("AnimationNodeStateMachineTransition_ns4cw"), "Slide Entry", "Landing", SubResource("AnimationNodeStateMachineTransition_r51jn"), "Slide", "Slide Exit", SubResource("AnimationNodeStateMachineTransition_pesv0"), "Slide Exit", "Move", SubResource("AnimationNodeStateMachineTransition_crhqg"), "Move", "Jump", SubResource("AnimationNodeStateMachineTransition_tuiu2"), "WallClimb", "Jump", SubResource("AnimationNodeStateMachineTransition_hew82"), "Slide", "Jump", SubResource("AnimationNodeStateMachineTransition_r8qkl"), "Jump", "Falling", SubResource("AnimationNodeStateMachineTransition_afbmf"), "Jump", "Landing", SubResource("AnimationNodeStateMachineTransition_lkcdh"), "Slide Entry", "Jump", SubResource("AnimationNodeStateMachineTransition_1t6vo"), "Slide Exit", "Jump", SubResource("AnimationNodeStateMachineTransition_y8xwm"), "Landing Exit", "Jump", SubResource("AnimationNodeStateMachineTransition_usd7r"), "Landing", "Jump", SubResource("AnimationNodeStateMachineTransition_dski3"), "Move", "Move Turnaround", SubResource("AnimationNodeStateMachineTransition_884eu"), "Move Turnaround", "Move", SubResource("AnimationNodeStateMachineTransition_kxyb0"), "Falling", "Airal Turnaround", SubResource("AnimationNodeStateMachineTransition_0lr3f"), "Airal Turnaround", "Falling", SubResource("AnimationNodeStateMachineTransition_ckwgb"), "Airal Turnaround", "Landing", SubResource("AnimationNodeStateMachineTransition_xa4n4"), "WallClimb", "Landing", SubResource("AnimationNodeStateMachineTransition_7og28")]
-graph_offset = Vector2(-205, -21.766)
+graph_offset = Vector2(-244, -186.766)
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 floor_constant_speed = true
@@ -1097,8 +1109,10 @@ script = ExtResource("1_ii5ia")
 health = ExtResource("2_7e7c2")
 
 [node name="PlayerSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_j1tjh")
-hframes = 2
+position = Vector2(0, 22)
+texture = ExtResource("8_bev63")
+offset = Vector2(1, -10)
+hframes = 6
 
 [node name="PlayerCollidor" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_mku71")
@@ -1154,7 +1168,7 @@ character = NodePath("..")
 
 [node name="FloorRayCast" type="RayCast2D" parent="."]
 visible = false
-target_position = Vector2(0, 24)
+target_position = Vector2(0, 25)
 
 [node name="GroundRayCast" type="RayCast2D" parent="."]
 visible = false
@@ -1184,6 +1198,7 @@ visible = false
 target_position = Vector2(10, 0)
 
 [node name="WallRayCastLegs" type="RayCast2D" parent="."]
+visible = false
 position = Vector2(0, 10)
 target_position = Vector2(10, 0)
 

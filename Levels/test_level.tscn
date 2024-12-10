@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c7xodrbvbn2t"]
+[gd_scene load_steps=15 format=3 uid="uid://c7xodrbvbn2t"]
 
 [ext_resource type="PackedScene" uid="uid://cjorsjhnwhodd" path="res://Scripts/Character/player.tscn" id="1_2ngr8"]
 [ext_resource type="Texture2D" uid="uid://bi8qfgpv5kult" path="res://Sprites/Temp/Level Guides/Test Level 3.png" id="2_gnuv7"]
@@ -10,6 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://dl2d7pprrfa8w" path="res://Sprites/Temp/Level Guides/Test Level 9.png" id="7_nfbu2"]
 [ext_resource type="Texture2D" uid="uid://ex0004hk8qkb" path="res://Sprites/Temp/Level Guides/Test Level 10.png" id="8_akfj3"]
 [ext_resource type="TileSet" uid="uid://c2vcrdbj0flab" path="res://Sprites/Tilemaps/Blockout Tilemap.tres" id="10_ccbqw"]
+[ext_resource type="Script" path="res://Scripts/Resources/HealthResource.gd" id="10_xxtx2"]
+
+[sub_resource type="Resource" id="Resource_dudqk"]
+resource_local_to_scene = true
+script = ExtResource("10_xxtx2")
+health = 0.0
+max_health = 0.0
 
 [sub_resource type="Gradient" id="Gradient_m20pe"]
 offsets = PackedFloat32Array(0, 0.680798, 0.683292)
@@ -64,6 +71,7 @@ texture = ExtResource("8_akfj3")
 
 [node name="Player" parent="." instance=ExtResource("1_2ngr8")]
 position = Vector2(-24438, 3179)
+health = SubResource("Resource_dudqk")
 
 [node name="Test Tilemap" type="TileMap" parent="."]
 position = Vector2(0, 1)
@@ -81,6 +89,6 @@ texture = SubResource("GradientTexture2D_whvfi")
 height = 10.0
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="."]
-position = Vector2(602, -240)
+position = Vector2(638, -397)
 color = Color(1, 1, 1, 0.443137)
 height = 0.5

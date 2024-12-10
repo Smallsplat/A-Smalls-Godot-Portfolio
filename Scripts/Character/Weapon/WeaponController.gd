@@ -45,8 +45,6 @@ func OnSpawned():
 		costs.append(CostCalculation("reload", (reload_speed)))
 		
 		first_spawn = false
-
-	UpdateCost()
 	
 func _ready():
 	animator.play("Ready")
@@ -110,7 +108,7 @@ func ValidateStatChange(stat, value : float):
 				if not ValidateCostChange(3, cost): return false
 			else: return false
 	
-	#Update costs if we're returning true? --- Maybe don't do this and do it elsewhere???
+	#Update costs and costs if we're returning true
 	UpdateStat(stat, value)
 	UpdateCost()
 	return true
@@ -134,7 +132,7 @@ func UpdateCost():
 	energy = 0
 	for cost in costs:
 		energy += cost
-	character.ui_controller.UpdateWeaponEnergy(energy)
+	character.ui_controller.WeaponUI.UpdateWeaponEnergy(energy)
 
 func ValidateCostChange(value : int, new_cost : float): #Input new cost
 	var total = 0

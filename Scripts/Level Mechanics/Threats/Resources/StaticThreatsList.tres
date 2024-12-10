@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="StaticThreatsList" load_steps=2 format=3 uid="uid://ccl8pb27rny"]
+
+[ext_resource type="Script" path="res://Scripts/Level Mechanics/Threats/Resources/StaticThreatsList.gd" id="1_4fstx"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_4fstx")
+threat_choice = 0

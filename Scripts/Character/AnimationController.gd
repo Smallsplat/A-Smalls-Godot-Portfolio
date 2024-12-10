@@ -87,6 +87,8 @@ func Jump():
 
 func Fall():
 	playback.travel("Falling")
+	if jump_type == 2:
+		animation_tree.advance(0.6)
 		
 func WallRun():
 	playback.travel("WallClimb")

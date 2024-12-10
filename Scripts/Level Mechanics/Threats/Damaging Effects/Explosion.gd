@@ -9,13 +9,6 @@ func _ready():
 	var rng = RandomNumberGenerator.new()
 	var random_rotation = rng.randf_range(0, 360)
 	self.rotation_degrees = random_rotation
-
-func TryDamage(object, amount):
-	# The explosion itself does no damage, it must summon the object to damage and the amount from its progenitor
-	# This lets the attack decide what hits rather than the visual effect. 
-	if damage_logic:
-		damage_logic.damage = amount
-		damage_logic.Damage(object)
 	
 func _on_animation_player_animation_finished(_anim_name):
 	queue_free()
