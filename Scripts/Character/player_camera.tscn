@@ -60,3 +60,53 @@ offset_right = 88.0
 offset_bottom = 52.0
 max_value = 5.0
 show_percentage = false
+
+[node name="Health Tracker" type="Panel" parent="Camera2D/HUD"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -139.0
+offset_bottom = -99.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Health Title" type="RichTextLabel" parent="Camera2D/HUD/Health Tracker"]
+layout_mode = 0
+offset_right = 90.0
+offset_bottom = 25.0
+text = "Health"
+
+[node name="Health Bar" type="ProgressBar" parent="Camera2D/HUD/Health Tracker"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 24.0
+offset_right = 88.0
+offset_bottom = 36.0
+max_value = 5.0
+show_percentage = false
+
+[node name="Distance Tracker" type="Panel" parent="Camera2D/HUD"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -48.0
+offset_right = 127.0
+grow_vertical = 0
+
+[node name="Distance Title" type="RichTextLabel" parent="Camera2D/HUD/Distance Tracker"]
+layout_mode = 0
+offset_left = 2.0
+offset_right = 129.0
+offset_bottom = 25.0
+text = "Best Distance"
+
+[node name="Distance Number" type="RichTextLabel" parent="Camera2D/HUD/Distance Tracker"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 24.0
+offset_right = 128.0
+offset_bottom = 49.0
+text = "0000000"

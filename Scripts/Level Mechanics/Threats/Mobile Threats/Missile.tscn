@@ -16,7 +16,7 @@ damage_logic = ExtResource("2_t1ayi")
 texture = ExtResource("2_2lkrn")
 
 [node name="Area2D" type="Area2D" parent="."]
-collision_layer = 4
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_fqpy5")

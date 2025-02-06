@@ -3,7 +3,7 @@ extends Node
 class_name AnimationController
 
 @export var character : CharacterBody2D
-@export var player_sprite : Sprite2D
+@export var player_sprite : Node2D
 @export var animation_tree : AnimationTree
 @onready var playback = animation_tree["parameters/playback"]
 
@@ -96,7 +96,7 @@ func WallRun():
 func _on_animation_tree_animation_finished(anim_name):
 	if (anim_name == "Landing"):
 		if power_land == 0:
-			if character.velocity.x == 0:
+			if abs(character.velocity.x) <= 50:
 				playback.travel("Landing Exit")
 			else:
 				character.state_machine.SwitchStates(character.state_machine.CalculateState())

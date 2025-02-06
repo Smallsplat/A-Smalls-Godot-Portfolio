@@ -23,7 +23,7 @@ func _on_area_2d_body_entered(body):
 func Trigger(player : PlayerCharacter):
 	#Get the Maths
 	var player_direction : Vector2 = player.velocity.normalized()
-	var player_camera_position : Vector2 = player.player_camera.position
+	var player_camera_position : Vector2 = player.player_camera.global_position
 	var window_size : Vector2 = DisplayServer.window_get_size()
 	
 	#Get the draw space for raycasting
@@ -86,6 +86,6 @@ func Trigger(player : PlayerCharacter):
 				
 			var threat = threat_list.GetThreat().instantiate()
 			threat.position = valid_spawns[counter] + spawn_offset
-			get_parent().call_deferred("add_child", threat)
+			get_tree().get_root().add_child.call_deferred(threat)
 	else:
 		print ("No valid spawns!")

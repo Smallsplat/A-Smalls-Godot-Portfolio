@@ -17,9 +17,12 @@ func _ready():
 		a_point_index = GeneratePoints(a_point_index, b_point_index) + 1
 		b_point_index = a_point_index + 1
 	#Spawn threats after generation
-	SpawnThreats()
+	call_deferred("SpawnThreats")
 	
 func GeneratePoints(a_point_index, b_point_index):
+	if path.curve.get_point_count() == b_point_index:
+		push_warning("spline ", self.name, " has broke count during spawning")
+		return b_point_index
 	var new_end_point = b_point_index
 	
 	#Generate Random Offset

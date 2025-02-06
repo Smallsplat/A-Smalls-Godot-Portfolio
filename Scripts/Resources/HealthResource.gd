@@ -6,6 +6,7 @@ class_name HealthResource
 @export var max_health : float
 
 signal death
+signal damaged
 
 func _init(p_health = 1, p_max_health = 1):
 	health = p_health
@@ -13,6 +14,7 @@ func _init(p_health = 1, p_max_health = 1):
 
 func Damaged(damage):
 	health -= damage
+	damaged.emit()
 	if health <= 0:
 		death.emit()
 

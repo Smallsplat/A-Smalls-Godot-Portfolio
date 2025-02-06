@@ -22,7 +22,7 @@ func _ready():
 		print_debug("A missile has failed to find a player")
 	else:
 		player = players[0]
-		self.look_at(player.position)
+		self.look_at(player.global_position)
 		
 	indi_offset.x = (indicator.texture.get_width() * 0.5)
 	indi_offset.y = (indicator.texture.get_height() * 0.5)
@@ -30,7 +30,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if player:
-		velocity += CalculateVector(player.position)
+		velocity += CalculateVector(player.global_position)
 		velocity = velocity.limit_length(speed)
 		if velocity.length() < min_speed:
 			velocity = velocity.normalized() * min_speed

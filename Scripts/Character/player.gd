@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 class_name PlayerCharacter
 
-@onready var player_sprite : Sprite2D = $PlayerSprite
+@onready var player_sprite : Node2D = $"PlayerSprite Origin"
 @onready var player_collider : CollisionShape2D = $PlayerCollidor
 @onready var state_machine : CharacterStateMachine = $CharacterStateMachine
 @onready var movement_controller : MovementController = $MovementController
@@ -61,6 +61,8 @@ func _ready():
 	health.health = 5
 	print (health.health)
 	health.death.connect(Death)
+	health.damaged.connect(Damaged)
+	Damaged()
 
 func instantiate_camera():
 	var instanced_camera = camera.instantiate()
@@ -172,8 +174,12 @@ func move_camera():
 	#else:
 		#player_camera.position = self.position
 
+func Damaged():
+	ui_controller.UpdateHealth(health.health)
+
 func Death():
-	self.position = player_spawner.position
+	self.position = player_spawner.global_position
 	player_camera.position = self.position
 	health.health = 5
+	Damaged()
 	print ("Player has Died!")

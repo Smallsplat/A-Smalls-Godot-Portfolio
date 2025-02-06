@@ -33,3 +33,4 @@ func ChangeLevel():
 	get_tree().root.add_child(new_scene)
 	get_tree().root.move_child(new_scene, 0)
 	get_tree().root.remove_child(CurrentLevel)
+	player.ui_controller.distance = 0

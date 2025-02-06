@@ -21,21 +21,16 @@
 			"uuid": "afb4bc47-a067-4cd6-8f9f-6af6fb8bfeed",
 			"title": "Todo",
 			"tasks": [
-				"ec81f871-ac65-4871-b04f-5fc14ce16dc6",
-				"45012d1b-0959-450b-8609-2ae7ee60a743",
-				"02e3832c-0f0a-4e09-8567-9c48a5710ce5",
-				"35c60f57-5883-4bea-b639-91e932a1ccca",
-				"477f4fa5-fe0a-499e-acf7-950033f11b90",
 				"1529c4ec-9571-43e3-80c8-55751e83d7e2",
-				"f4ae03bf-4f36-472e-a357-45e3e050e013"
+				"f4ae03bf-4f36-472e-a357-45e3e050e013",
+				"63a82d2c-b84a-4805-b205-586073aa9622"
 			]
 		},
 		{
 			"uuid": "06935dcc-1e36-449d-98ad-88d24d41d52d",
 			"title": "Doing",
 			"tasks": [
-				"14d0c96f-13fb-486b-b1cf-54954d9d6106",
-				"c285da1d-abe5-471d-be98-8e3aebcbfc81"
+				"35c60f57-5883-4bea-b639-91e932a1ccca"
 			]
 		},
 		{
@@ -47,7 +42,14 @@
 				"5e3350d8-6744-4cfd-a1ee-c1b4d9d9cf5a",
 				"0a405c6a-71e4-47eb-9d6c-82c56d88e42b",
 				"2630b821-0316-4733-aeed-f8c2af82ffcd",
-				"65bbe68c-2a20-4409-a4be-e8a4037912ae"
+				"65bbe68c-2a20-4409-a4be-e8a4037912ae",
+				"477f4fa5-fe0a-499e-acf7-950033f11b90",
+				"c285da1d-abe5-471d-be98-8e3aebcbfc81",
+				"45012d1b-0959-450b-8609-2ae7ee60a743",
+				"02e3832c-0f0a-4e09-8567-9c48a5710ce5",
+				"ec81f871-ac65-4871-b04f-5fc14ce16dc6",
+				"563ef33e-bc09-4bb1-b7dd-d5fa10b11bf4",
+				"14d0c96f-13fb-486b-b1cf-54954d9d6106"
 			]
 		}
 	],
@@ -141,23 +143,23 @@
 				},
 				{
 					"details": "CA Wall Jump",
-					"done": false
+					"done": true
 				},
 				{
 					"details": "CA Power Land",
-					"done": false
+					"done": true
 				},
 				{
 					"details": "CA Land",
-					"done": false
+					"done": true
 				},
 				{
 					"details": "CA Slide",
-					"done": false
+					"done": true
 				},
 				{
 					"details": "CA Slide Entry",
-					"done": false
+					"done": true
 				}
 			]
 		},
@@ -178,6 +180,29 @@
 		{
 			"uuid": "477f4fa5-fe0a-499e-acf7-950033f11b90",
 			"title": "Impliment New character Animations",
+			"description": "",
+			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
+			"steps": []
+		},
+		{
+			"uuid": "63a82d2c-b84a-4805-b205-586073aa9622",
+			"title": "Recovery Jump Jet Backpack",
+			"description": "",
+			"category": "794e9c91-2979-474c-bb05-c00b47b82a59",
+			"steps": [
+				{
+					"details": "Spriteing",
+					"done": false
+				},
+				{
+					"details": "Fireing animation sprite",
+					"done": false
+				}
+			]
+		},
+		{
+			"uuid": "563ef33e-bc09-4bb1-b7dd-d5fa10b11bf4",
+			"title": "Fix Player Death (Sorta)",
 			"description": "",
 			"category": "ae02c365-d7c1-4050-83aa-f62d0836a85a",
 			"steps": []

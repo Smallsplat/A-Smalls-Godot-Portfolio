@@ -1,0 +1,6 @@
+[gd_resource type="CanvasTexture" load_steps=2 format=3 uid="uid://db3qldttw3jqd"]
+
+[ext_resource type="Texture2D" uid="uid://dkhnvei521bg4" path="res://Sprites/Character Sprites/Thunder Air Turn BA-Sheet.png" id="1_xm3c3"]
+
+[resource]
+diffuse_texture = ExtResource("1_xm3c3")

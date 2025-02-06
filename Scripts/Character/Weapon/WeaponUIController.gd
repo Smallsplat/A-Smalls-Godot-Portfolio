@@ -153,3 +153,6 @@ func InvertSlider(value, max_value, min_value):
 	return ((value - min_value) * -1) + max_value
 	# DO NOT ROUND HERE, Vector 2 decmimals have a floating point error that must not be corrected until after calulcations.
 	# use Snapped() on visable numbers directly.
+	
+func InvertedControls(inverted):
+	character.weapon_controller.inverted = inverted

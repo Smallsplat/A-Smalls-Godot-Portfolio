@@ -15,6 +15,9 @@ var speedometer
 var ammometer
 var timeout_bar
 var reload_bar
+var health_bar
+var distance_tracker
+var distance = 0
 
 var mouse_lockout : bool = false
 
@@ -24,6 +27,8 @@ func OnSpawned():
 	ammometer = player_camera.find_child("Ammometer")
 	timeout_bar = player_camera.find_child("Reload Timeout Bar")
 	reload_bar = player_camera.find_child("Reload Bar")
+	health_bar = player_camera.find_child("Health Bar")
+	distance_tracker = player_camera.find_child("Distance Number")
 	
 	UpdateAmmometer(character.weapon_controller.ammo)
 	timeout_bar.max_value = character.weapon_controller.reload_time_out_length
@@ -49,6 +54,7 @@ func _process(_delta):
 	UpdateReloadBar(character.weapon_controller.reload_speed - character.weapon_controller.reload_timer.time_left)
 	UpdateTimeoutBar(character.weapon_controller.reload_time_out_length - character.weapon_controller.reload_time_out.time_left)
 	
+	UpdateDistanceTracker()
 func UpdateSpeedometer(speed):
 	speedometer.text = str("Speed : ", speed)
 
@@ -62,6 +68,9 @@ func UpdateTimeoutBar(value):
 func UpdateReloadBar(value):
 	reload_bar.value = value
 	reload_bar.max_value = character.weapon_controller.reload_speed
+
+func UpdateHealth(Health):
+	health_bar.value = Health
 	
 func ToggleWeaponModulation():
 	if WeaponUI.visible:
@@ -78,3 +87,7 @@ func InvertSlider(value, max_value, min_value):
 	# DO NOT ROUND HERE, Vector 2 decmimals have a floating point error that must not be corrected until after calulcations.
 	# use Snapped() on visable numbers directly.
 
+func UpdateDistanceTracker():
+	if distance < snapped((abs(character.player_spawner.global_position.x - character.global_position.x)),(1)):
+		distance = snapped((abs(character.player_spawner.global_position.x - character.global_position.x)),(1))
+	distance_tracker.text = str(distance) 

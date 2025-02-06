@@ -5,6 +5,7 @@ extends Node2D
 @onready var sprite = $Sprite2D
 var colliding = []
 @export var damage : float = 1
+var cooldown = false
 
 @export var damage_logic : DamageResource
 
@@ -16,7 +17,8 @@ func _ready():
 
 func OnEntered(object):
 	colliding.append(object)
-	if object.is_in_group("Player"):
+	if object.is_in_group("Player") and not cooldown:
+		cooldown = true
 		Trigger()
 
 func OnExit(object):
@@ -35,7 +37,9 @@ func Detonate():
 	for object in colliding:
 		TryDamage(object, damage)
 	print ("Instanced Explosion at ", instanced_exposion.position)
-	queue_free()
+	sprite.visible = false
+	#await get_tree().create_timer(5).timeout
+	cooldown = false
 
 func _on_animation_player_animation_finished(_anim_name):
 	Detonate()

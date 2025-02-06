@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/Level Mechanics/Player Tools/PlayerSpawner.gd" id="2_smkm2"]
 [ext_resource type="Resource" uid="uid://h5iebo7lnc0q" path="res://Scripts/Level Spawning/Set1Levels.tres" id="2_vn2j0"]
 
-[node name="LevelSpawning" type="Node2D"]
+[node name="LevelSpawning" type="Node2D" groups=["LevelScene"]]
 
 [node name="DirectionalWorld" type="DirectionalLight2D" parent="."]
 position = Vector2(0, 2.38419e-07)
@@ -20,5 +20,5 @@ script = ExtResource("1_cplrb")
 level_list = ExtResource("2_vn2j0")
 
 [node name="PlayerSpawner" type="Node2D" parent="."]
-position = Vector2(-49935, -47)
+position = Vector2(-49935, -1265)
 script = ExtResource("2_smkm2")
